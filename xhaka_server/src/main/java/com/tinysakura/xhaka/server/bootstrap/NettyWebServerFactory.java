@@ -1,6 +1,5 @@
 package com.tinysakura.xhaka.server.bootstrap;
 
-import com.tinysakura.xhaka.core.webserver.XhakaWebServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;

@@ -36,8 +36,6 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     private FullHttpRequest originalRequest;
 
-    private XhakaHttpServletResponse xhakaHttpServletResponse;
-
     private ChannelHandlerContext ctx;
 
     private XhakaServletInputStream xhakaServletInputStream;
@@ -47,6 +45,8 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
     private String contextPath;
 
     private Map<String, Object> attributes;
+
+    private XhakaHttpServletResponse httpServletResponse;
 
     private Map<String, List<String>> parameters;
 
@@ -62,12 +62,10 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     private UriParser uriParser;
 
-    XhakaHttpServletRequest(FullHttpRequest originalRequest,
-                            XhakaHttpServletResponse xhakaHttpServletResponse,
-                            ChannelHandlerContext ctx) {
+    public XhakaHttpServletRequest(FullHttpRequest originalRequest,
+                                   ChannelHandlerContext ctx) {
         this.originalRequest = originalRequest;
         this.ctx = ctx;
-        this.xhakaHttpServletResponse = xhakaHttpServletResponse;
         this.xhakaServletInputStream = new XhakaServletInputStream(originalRequest.content());
 
         this.headers = originalRequest.headers();
@@ -565,5 +563,13 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     public FullHttpRequest getOriginalRequest() {
         return originalRequest;
+    }
+
+    public XhakaHttpServletResponse getHttpServletResponse() {
+        return httpServletResponse;
+    }
+
+    public void setHttpServletResponse(XhakaHttpServletResponse httpServletResponse) {
+        this.httpServletResponse = httpServletResponse;
     }
 }
