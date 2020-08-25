@@ -1,7 +1,7 @@
 package com.tinysakura.xhaka.core.webserver;
 
-import com.tinysakura.xhaka.common.handler.XhakaProtocalHandler;
-import com.tinysakura.xhaka.common.handler.codec.Http2XhakaCodec;
+import com.tinysakura.xhaka.common.handler.FullHttpRequest2HttpServletHandler;
+import com.tinysakura.xhaka.common.handler.XhakaHttpServletHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -61,8 +61,10 @@ public class XhakaWebServer implements WebServer {
                         socketChannel.pipeline().addLast(new HttpServerCodec())
                                 .addLast(new HttpObjectAggregator(100 * 1024))
                                 .addLast(new ChunkedWriteHandler())
-                                .addLast(new Http2XhakaCodec())
-                                .addLast(businessGroup, new XhakaProtocalHandler());
+                                //.addLast(new Http2XhakaCodec())
+                                .addLast(new FullHttpRequest2HttpServletHandler())
+                                .addLast(businessGroup, new XhakaHttpServletHandler());
+                                //.addLast(businessGroup, new XhakaProtocalHandler());
                     }
                 }).bind(inetSocketAddress).awaitUninterruptibly();
 
