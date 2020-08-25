@@ -60,7 +60,7 @@ public class FilterRegistrationBeanWrap extends FilterRegistrationBean {
 
     private void initDispatcherMapping() {
         try {
-            Field dispatcherTypesField = this.filterRegistrationBean.getClass().getField("dispatcherTypes");
+            Field dispatcherTypesField = this.filterRegistrationBean.getClass().getSuperclass().getDeclaredField("dispatcherTypes");
             dispatcherTypesField.setAccessible(true);
             Object o = dispatcherTypesField.get(filterRegistrationBean);
             this.dispatcherTypes = (EnumSet<DispatcherType>) o;
