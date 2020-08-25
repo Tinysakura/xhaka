@@ -2,9 +2,12 @@ package com.tinysakura.xhaka.common.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Locale;
 
@@ -84,5 +87,30 @@ public class FilterRegistrationBeanWrap extends FilterRegistrationBean {
         }
 
         return dispatcherMapping;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return this.filterRegistrationBean.getFilter();
+    }
+
+    @Override
+    public int getOrder() {
+        return this.filterRegistrationBean.getOrder();
+    }
+
+    @Override
+    public Collection<String> getUrlPatterns() {
+        return this.filterRegistrationBean.getUrlPatterns();
+    }
+
+    @Override
+    public Collection<String> getServletNames() {
+        return this.filterRegistrationBean.getServletNames();
+    }
+
+    @Override
+    public Collection<ServletRegistrationBean<?>> getServletRegistrationBeans() {
+        return this.filterRegistrationBean.getServletRegistrationBeans();
     }
 }
