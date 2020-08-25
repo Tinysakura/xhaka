@@ -111,7 +111,11 @@ public class UriParser
             this.servletPath = servletPath;
 
             //TODO 加上pathInfo
-            this.requestUri = contextPath + servletPath;
+            if (!"/".equals(contextPath)) {
+                this.requestUri = contextPath + servletPath;
+            } else {
+                this.requestUri = servletPath;
+            }
         } else
         {
             this.servletPath = "";

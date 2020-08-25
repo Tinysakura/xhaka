@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka;
 
+import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
 import com.tinysakura.xhaka.core.webserver.XhakaWebServer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +21,7 @@ public class XhakaApplication {
             contextPath = "/";
         }
 
+        new XhakaWebServerContext(contextPath, port);
         new XhakaWebServer(port, 500, contextPath).start();
     }
 
