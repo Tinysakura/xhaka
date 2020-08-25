@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.common.handler;
+package com.tinysakura.xhaka.common.gateway.handler;
 
 import com.tinysakura.xhaka.common.protocal.Xhaka;
 import io.netty.channel.ChannelHandlerContext;

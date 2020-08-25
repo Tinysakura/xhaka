@@ -1,9 +1,9 @@
-package com.tinysakura.xhaka.common.handler.codec;
+package com.tinysakura.xhaka.common.gateway.handler.codec;
 
 import com.tinysakura.xhaka.common.protocal.Xhaka;
+import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
-import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @Date: 2020/8/20
  */
 @Slf4j
-public class Http2XhakaCodec extends MessageToMessageCodec<FullHttpRequest, Xhaka> {
+public class Http2XhakaCodec extends MessageToMessageCodec<XhakaHttpServletRequest, Xhaka> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Xhaka xhaka, List<Object> list) throws Exception {
@@ -22,7 +22,7 @@ public class Http2XhakaCodec extends MessageToMessageCodec<FullHttpRequest, Xhak
     }
 
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest, List<Object> list) throws Exception {
-        log.info(fullHttpRequest.toString());
+    protected void decode(ChannelHandlerContext channelHandlerContext, XhakaHttpServletRequest xhakaHttpServletRequest, List<Object> list) throws Exception {
+        Xhaka xhaka = new Xhaka();
     }
 }
