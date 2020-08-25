@@ -3,6 +3,7 @@ package com.tinysakura.xhaka.common.filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -64,6 +65,11 @@ public class FilterRegistrationBeanWrap extends FilterRegistrationBean {
             dispatcherTypesField.setAccessible(true);
             Object o = dispatcherTypesField.get(filterRegistrationBean);
             this.dispatcherTypes = (EnumSet<DispatcherType>) o;
+
+            if (CollectionUtils.isEmpty(dispatcherTypes)) {
+                dispatcherMappingInit = true;
+                return;
+            }
 
             for (DispatcherType dispatcherType : dispatcherTypes) {
                 setDispatcher(dispatcherType.name());
