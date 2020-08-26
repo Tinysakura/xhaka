@@ -1,6 +1,6 @@
 package com.tinysakura.xhaka.common.gateway.remote.util;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 线程安全的全局计数器工具类
@@ -9,14 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class GlobalCounterUtil {
-    private static final AtomicInteger XHAKA_SEQUENCE_GLOBAL_COUNTER = new AtomicInteger();
+    private static final AtomicLong XHAKA_SEQUENCE_GLOBAL_COUNTER = new AtomicLong();
 
     /**
      * 线程安全的生成xhaka协议请求序号
      * @return
      */
-    public int getXhakaRequestSequence() {
+    public static Long getXhakaRequestSequence() {
         // 使用getAndUpdate防止越界
-        return XHAKA_SEQUENCE_GLOBAL_COUNTER.getAndUpdate((i) -> i >= Integer.MAX_VALUE ? 0 : i + 1);
+        return XHAKA_SEQUENCE_GLOBAL_COUNTER.getAndUpdate((i) -> i >= Long.MAX_VALUE ? 0L : i + 1);
     }
 }

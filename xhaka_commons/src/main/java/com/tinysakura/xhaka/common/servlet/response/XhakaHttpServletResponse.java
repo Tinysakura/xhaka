@@ -1,7 +1,9 @@
 package com.tinysakura.xhaka.common.servlet.response;
 
 import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
+import com.tinysakura.xhaka.common.gateway.constant.XhakaHttpHeaderConstant;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
@@ -59,10 +61,11 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
 
     public XhakaHttpServletResponse(XhakaHttpServletRequest requestFacade, ChannelHandlerContext ctx) {
         this.requestFacade = requestFacade;
-        this.xhakaServletOutputSteam = new XhakaServletOutputSteam(this);
+        ByteBuf directBuffer = PooledByteBufAllocator.DEFAULT.directBuffer();
+        this.xhakaServletOutputSteam = new XhakaServletOutputSteam(this, directBuffer);
         this.ctx = ctx;
 
-        this.originResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, PooledByteBufAllocator.DEFAULT.directBuffer());
+        this.originResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, directBuffer);
         this.printWriter = new PrintWriter(xhakaServletOutputSteam);
         this.cookies = new ArrayList<>();
     }
@@ -310,6 +313,9 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
             }
             headers.add(HttpHeaderNames.SET_COOKIE, sb.toString());
         }
+
+        // 设置xhakaid
+        headers.add(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, requestFacade.getHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID));
     }
 
     /**

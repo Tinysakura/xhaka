@@ -26,7 +26,7 @@ public class XhakaTest {
         Xhaka xhaka = new Xhaka();
         xhaka.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST);
         xhaka.setPackType(XhakaHeaderConstant.XHAKA_PACK_TYPE_NORMAL);
-        xhaka.setSerialization(XhakaHeaderConstant.XHAKA_SERIALIZATION_PROROBUF);
+        xhaka.setSerialization(XhakaHeaderConstant.XHAKA_SERIALIZATION_PROTOBUF);
         xhaka.setXhakaStatus(XhakaHeaderConstant.XHAKA_STATUS_BAD_REQUEST_BODY);
         xhaka.setXhakaId(1928L);
         byte[] body = "abc".getBytes(Charset.forName("UTF-8"));
@@ -42,7 +42,7 @@ public class XhakaTest {
 
         Assert.assertEquals(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST, xhaka.getEventType());
         Assert.assertEquals(XhakaHeaderConstant.XHAKA_PACK_TYPE_NORMAL, xhaka.getPackType());
-        Assert.assertEquals(XhakaHeaderConstant.XHAKA_SERIALIZATION_PROROBUF, xhaka.getSerialization());
+        Assert.assertEquals(XhakaHeaderConstant.XHAKA_SERIALIZATION_PROTOBUF, xhaka.getSerialization());
         Assert.assertEquals(XhakaHeaderConstant.XHAKA_STATUS_BAD_REQUEST_BODY, xhaka.getXhakaStatus());
         Assert.assertEquals(java.util.Optional.of(1928L).get(), xhaka.getXhakaId());
         Assert.assertEquals(java.util.Optional.of(body.length).get(), xhaka.getBodyLength());

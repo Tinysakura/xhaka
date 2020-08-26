@@ -33,6 +33,10 @@ public class Xhaka {
         this.header = new byte[13];
     }
 
+    public Xhaka(byte[] header) {
+        this.header = header;
+    }
+
     public void setEventType(byte eventType) {
         header[0] = (byte) ((header[0] << 1) | eventType);
     }

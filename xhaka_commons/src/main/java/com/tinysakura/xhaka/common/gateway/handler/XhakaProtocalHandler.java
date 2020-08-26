@@ -10,6 +10,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 
 public class XhakaProtocalHandler extends SimpleChannelInboundHandler<Xhaka> {
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Xhaka xhaka) throws Exception {
 

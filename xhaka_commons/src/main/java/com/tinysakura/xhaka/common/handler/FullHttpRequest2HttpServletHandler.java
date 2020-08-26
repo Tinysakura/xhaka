@@ -6,6 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 
+import java.nio.charset.Charset;
+
 /**
  * 将FullHttp Request包装成HttpServletRequest实现
  * @Author: chenfeihao@corp.netease.com
@@ -21,6 +23,10 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) throws Exception {
 
         XhakaHttpServletRequest xhakaHttpServletRequest = new XhakaHttpServletRequest(fullHttpRequest, ctx);
+
+//        byte[] a = new byte[fullHttpRequest.content().readableBytes()];
+//        fullHttpRequest.content().readBytes(a);
+//        System.out.println(new String(a, Charset.forName("UTF-8")));
 
         XhakaHttpServletResponse xhakaHttpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, ctx);
         xhakaHttpServletRequest.setHttpServletResponse(xhakaHttpServletResponse);

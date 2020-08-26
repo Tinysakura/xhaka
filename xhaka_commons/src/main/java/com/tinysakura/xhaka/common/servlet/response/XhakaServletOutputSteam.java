@@ -2,7 +2,6 @@ package com.tinysakura.xhaka.common.servlet.response;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultHttpContent;
 import io.netty.handler.codec.http.HttpUtil;
@@ -24,9 +23,9 @@ public class XhakaServletOutputSteam extends ServletOutputStream {
     private boolean flushed = false;
     private boolean closed = false;
 
-    public XhakaServletOutputSteam(XhakaHttpServletResponse response) {
+    public XhakaServletOutputSteam(XhakaHttpServletResponse response, ByteBuf byteBuf) {
         this.xhakaHttpServletResponse = response;
-        this.pooledDirectByteBuf = PooledByteBufAllocator.DEFAULT.directBuffer();
+        this.pooledDirectByteBuf = byteBuf;
         this.byteBufOutputStream = new ByteBufOutputStream(pooledDirectByteBuf);
     }
 
@@ -66,10 +65,6 @@ public class XhakaServletOutputSteam extends ServletOutputStream {
         if (chunked && ctx.channel().isActive()) {
             if (!flushed) {
                 ctx.writeAndFlush(xhakaHttpServletResponse.getOriginResponse());
-            }
-            if (byteBufOutputStream.buffer().writerIndex() > byteBufOutputStream.buffer().readerIndex()) {
-                ctx.writeAndFlush((new DefaultHttpContent(byteBufOutputStream.buffer().copy())));
-                resetBuffer();
             }
             this.flushed = true;
         }
