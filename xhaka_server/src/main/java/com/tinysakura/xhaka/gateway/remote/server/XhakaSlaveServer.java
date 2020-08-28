@@ -1,8 +1,12 @@
 package com.tinysakura.xhaka.gateway.remote.server;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
-import com.tinysakura.xhaka.common.gateway.handler.XhakaProtocalHandler;
-import com.tinysakura.xhaka.common.gateway.handler.codec.*;
+import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaHttpServletHandler;
+import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaProtocolHandler;
+import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpResponse2XhakaEncoder;
+import com.tinysakura.xhaka.common.gateway.handler.codec.Xhaka2FulHttpRequestDecoder;
+import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaDecoder;
+import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaEncoder;
 import com.tinysakura.xhaka.common.handler.FullHttpRequest2HttpServletHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -50,13 +54,13 @@ public class XhakaSlaveServer implements WebServer {
                         socketChannel.pipeline()
                                 .addLast(new XhakaDecoder(XhakaGateWayConfig.getInstance().getXhakaMsgMaxLength(), 0, 4))
                                 //处理xhaka协议
-                                .addLast(new XhakaProtocalHandler())
+                                .addLast(new SlaveXhakaProtocolHandler())
                                 //处理xhaka协议转换的http request
                                 .addLast(new Xhaka2FulHttpRequestDecoder())
                                 //将FullHttpRequest转换为适配Servlet容器的xhakaHttpServletRequest
                                 .addLast(new FullHttpRequest2HttpServletHandler())
                                 //代理服务处理servlet request
-                                .addLast(new SlaveXhakaHttpServletHandler())
+                                .addLast(businessGroup, new SlaveXhakaHttpServletHandler())
                                 //将响应转换为xhaka协议发送给调用网关
                                 .addLast(new FullHttpResponse2XhakaEncoder())
                                 .addLast(new XhakaEncoder());

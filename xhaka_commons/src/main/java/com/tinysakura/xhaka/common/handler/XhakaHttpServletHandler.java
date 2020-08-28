@@ -1,6 +1,6 @@
 package com.tinysakura.xhaka.common.handler;
 
-import com.tinysakura.xhaka.common.filter.FilterChainFactory;
+import com.tinysakura.xhaka.common.filter.XhakaFilterChainFactory;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -17,7 +17,7 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, XhakaHttpServletRequest xhakaHttpServletRequest) throws Exception {
-        FilterChain filterChain = FilterChainFactory.createFilterChain(xhakaHttpServletRequest);
+        FilterChain filterChain = XhakaFilterChainFactory.createFilterChain(xhakaHttpServletRequest);
         filterChain.doFilter(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
 
         // todo 网关转发部分逻辑

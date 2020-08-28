@@ -1,7 +1,7 @@
 package com.tinysakura.xhaka.common.protocal;
 
 import com.tinysakura.xhaka.common.protocal.constant.XhakaHeaderConstant;
-import com.tinysakura.xhaka.common.util.BytesUtil;
+import com.tinysakura.xhaka.common.util.BytesUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +16,7 @@ import java.nio.charset.Charset;
 public class XhakaTest {
     @Test
     public void testByte2BinaryStr() {
-        System.out.println(BytesUtil.byte2BinaryStr((byte) 15));
+        System.out.println(BytesUtils.byte2BinaryStr((byte) 15));
     }
 
 
@@ -36,7 +36,7 @@ public class XhakaTest {
 
 
         for (byte b : xhaka.getHeader()) {
-            System.out.println(BytesUtil.byte2BinaryStr(b));
+            System.out.println(BytesUtils.byte2BinaryStr(b));
         }
 
 

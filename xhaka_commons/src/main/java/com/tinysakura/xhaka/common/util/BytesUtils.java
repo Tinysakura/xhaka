@@ -6,7 +6,7 @@ package com.tinysakura.xhaka.common.util;
  * @Date: 2020/8/20
  */
 
-public class BytesUtil {
+public class BytesUtils {
 
     public static int bytes2int(byte[] b)
     {

@@ -24,6 +24,7 @@ public class XhakaHeaderConstant {
     public static final byte XHAKA_STATUS_TIMEOUT = 1;
     public static final byte XHAKA_STATUS_BAD_HEADER = 2;
     public static final byte XHAKA_STATUS_BAD_REQUEST_BODY = 3;
+    public static final byte XHAKA_STATUS_FAIELD = 4;
 
     public static byte getXhakaSerializationTypeByDesc(String desc) {
         if (desc.equalsIgnoreCase(XHAKA_SERIALIZATION_JAVA_DESC)) {

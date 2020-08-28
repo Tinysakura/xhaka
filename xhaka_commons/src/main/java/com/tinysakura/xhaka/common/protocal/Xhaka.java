@@ -1,6 +1,6 @@
 package com.tinysakura.xhaka.common.protocal;
 
-import com.tinysakura.xhaka.common.util.BytesUtil;
+import com.tinysakura.xhaka.common.util.BytesUtils;
 
 /**
  * xhaka协议
@@ -72,19 +72,19 @@ public class Xhaka {
     }
 
     public Long getXhakaId() {
-        return BytesUtil.bytes2long(header, 1);
+        return BytesUtils.bytes2long(header, 1);
     }
 
     public void setXhakaId(Long xhakaId) {
-        BytesUtil.long2bytes(xhakaId, header, 1);
+        BytesUtils.long2bytes(xhakaId, header, 1);
     }
 
     public Integer getBodyLength() {
-        return BytesUtil.bytes2int(header, 9);
+        return BytesUtils.bytes2int(header, 9);
     }
 
     public void setBodyLength(Integer bodyLength) {
-        BytesUtil.int2bytes(bodyLength, header, 9);
+        BytesUtils.int2bytes(bodyLength, header, 9);
     }
 
     public void setBody(byte[] body) {
