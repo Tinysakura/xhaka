@@ -35,6 +35,10 @@ public class XhakaGateWayConfig {
 
     private String loadBalance;
 
+    private Integer gatewayClientConnCoreThreadSize;
+
+    private Integer gatewayClientConnMaxThreadSize;
+
     public static XhakaGateWayConfig instance;
 
     public XhakaGateWayConfig() {
@@ -98,5 +102,21 @@ public class XhakaGateWayConfig {
 
     public void setSlaveResponseTimeout(Integer slaveResponseTimeOut) {
         this.slaveResponseTimeout = slaveResponseTimeOut;
+    }
+
+    public Integer getGatewayClientConnCoreThreadSize() {
+        return gatewayClientConnCoreThreadSize;
+    }
+
+    public void setGatewayClientConnCoreThreadSize(Integer gatewayClientConnCoreThreadSize) {
+        this.gatewayClientConnCoreThreadSize = gatewayClientConnCoreThreadSize;
+    }
+
+    public Integer getGatewayClientConnMaxThreadSize() {
+        return gatewayClientConnMaxThreadSize;
+    }
+
+    public void setGatewayClientConnMaxThreadSize(Integer gatewayClientConnMaxThreadSize) {
+        this.gatewayClientConnMaxThreadSize = gatewayClientConnMaxThreadSize;
     }
 }

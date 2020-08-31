@@ -3,7 +3,7 @@ package com.tinysakura.xhaka.common.handler;
 import com.tinysakura.xhaka.common.filter.XhakaFilterChainFactory;
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.constant.XhakaHttpHeaderConstant;
-import com.tinysakura.xhaka.common.gateway.discovery.core.GatewaySlaveChannelPool;
+import com.tinysakura.xhaka.common.gateway.remote.core.GatewaySlaveChannelPool;
 import com.tinysakura.xhaka.common.gateway.future.XhakaFuture;
 import com.tinysakura.xhaka.common.gateway.remote.route.ServerDispatcher;
 import com.tinysakura.xhaka.common.gateway.remote.util.GlobalCounterUtil;

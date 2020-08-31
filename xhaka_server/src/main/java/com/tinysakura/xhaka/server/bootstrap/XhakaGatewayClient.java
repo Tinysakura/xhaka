@@ -1,7 +1,7 @@
-package com.tinysakura.xhaka.core.bootstrap;
+package com.tinysakura.xhaka.server.bootstrap;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
-import com.tinysakura.xhaka.common.gateway.discovery.core.GatewaySlaveChannelPool;
+import com.tinysakura.xhaka.common.gateway.remote.core.GatewaySlaveChannelPool;
 import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaHttpServletResponsehHandler;
 import com.tinysakura.xhaka.common.gateway.handler.XhakaProtocolHandler;
 import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpRequest2XhakaEncoder;

@@ -1,7 +1,7 @@
-package com.tinysakura.xhaka.common.gateway.discovery.core;
+package com.tinysakura.xhaka.common.gateway.remote.core;
 
-import com.tinysakura.xhaka.common.gateway.discovery.nlb.LoadBalanceStrategy;
-import com.tinysakura.xhaka.common.gateway.discovery.nlb.constant.LoadBalanceStrategyConstant;
+import com.tinysakura.xhaka.common.gateway.remote.nlb.LoadBalanceStrategy;
+import com.tinysakura.xhaka.common.gateway.remote.nlb.constant.LoadBalanceStrategyConstant;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;

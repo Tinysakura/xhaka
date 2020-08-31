@@ -1,7 +1,7 @@
-package com.tinysakura.xhaka.common.gateway.discovery.nlb.impl;
+package com.tinysakura.xhaka.common.gateway.remote.nlb.impl;
 
-import com.tinysakura.xhaka.common.gateway.discovery.nlb.LoadBalanceStrategy;
-import com.tinysakura.xhaka.common.gateway.discovery.nlb.constant.LoadBalanceStrategyConstant;
+import com.tinysakura.xhaka.common.gateway.remote.nlb.LoadBalanceStrategy;
+import com.tinysakura.xhaka.common.gateway.remote.nlb.constant.LoadBalanceStrategyConstant;
 import io.netty.channel.Channel;
 
 /**

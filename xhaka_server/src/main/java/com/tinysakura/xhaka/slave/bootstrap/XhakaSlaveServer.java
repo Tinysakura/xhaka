@@ -1,6 +1,7 @@
-package com.tinysakura.xhaka.gateway.slave.server;
+package com.tinysakura.xhaka.slave.bootstrap;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
+import com.tinysakura.xhaka.common.gateway.discovery.XhakaDiscovery;
 import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaHttpServletHandler;
 import com.tinysakura.xhaka.common.gateway.handler.XhakaProtocolHandler;
 import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpResponse2XhakaEncoder;
@@ -36,6 +37,12 @@ public class XhakaSlaveServer implements WebServer {
 
     private DefaultEventLoopGroup businessGroup;
 
+    private String serverName;
+
+    public XhakaSlaveServer(String serverName) {
+        this.serverName = serverName;
+    }
+
     @Override
     public void start() throws WebServerException {
         InetSocketAddress inetSocketAddress = new InetSocketAddress(XhakaGateWayConfig.getInstance().getSlaveNettyServerPort());
@@ -69,7 +76,12 @@ public class XhakaSlaveServer implements WebServer {
 
         if (future.cause() != null) {
             log.error("start xhaka slave server failed", future.cause());
+            return;
         }
+
+        // 开启netty server端口后，将自己注册到zk，xhaka网关会监听到zk节点的变化发起与该代理服务的连接
+        InetSocketAddress localAddress = (InetSocketAddress) future.channel().localAddress();
+        XhakaDiscovery.registerXhaka(serverName, localAddress.getHostString(), localAddress.getPort());
 
         log.info("start xhaka slave server on port:{}", getPort());
     }

@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.common.gateway.discovery.nlb.constant;
+package com.tinysakura.xhaka.common.gateway.remote.nlb.constant;
 
 /**
  * @Author: chenfeihao@corp.netease.com

@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.common.gateway.discovery.nlb;
+package com.tinysakura.xhaka.common.gateway.remote.nlb;
 
 import io.netty.channel.Channel;
 

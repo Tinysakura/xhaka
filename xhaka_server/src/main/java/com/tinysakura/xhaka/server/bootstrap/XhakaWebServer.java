@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.core.bootstrap;
+package com.tinysakura.xhaka.server.bootstrap;
 
 import com.tinysakura.xhaka.common.handler.FullHttpRequest2HttpServletHandler;
 import com.tinysakura.xhaka.common.handler.XhakaHttpServletHandler;
