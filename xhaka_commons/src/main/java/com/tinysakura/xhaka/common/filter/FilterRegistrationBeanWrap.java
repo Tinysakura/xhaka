@@ -75,7 +75,7 @@ public class FilterRegistrationBeanWrap extends FilterRegistrationBean {
                 setDispatcher(dispatcherType.name());
             }
         } catch (Exception e) {
-            log.info("getDispatcherTypes failed", e);
+            log.error("getDispatcherTypes failed", e);
         }
 
         dispatcherMappingInit = true;

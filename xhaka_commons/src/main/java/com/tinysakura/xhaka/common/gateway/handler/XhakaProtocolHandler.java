@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2020/8/20
  */
 @Slf4j
-public class SlaveXhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
+public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Xhaka xhaka) throws Exception {

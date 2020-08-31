@@ -29,7 +29,11 @@ public class XhakaGateWayConfig {
      */
     private Integer slaveBusinessThreadCount;
 
-    private Integer XhakaMsgMaxLength;
+    private Integer slaveResponseTimeout;
+
+    private Integer xhakaMsgMaxLength;
+
+    private String loadBalance;
 
     public static XhakaGateWayConfig instance;
 
@@ -44,19 +48,55 @@ public class XhakaGateWayConfig {
         return discoveryHost;
     }
 
+    public void setDiscoveryHost(String discoveryHost) {
+        this.discoveryHost = discoveryHost;
+    }
+
     public String getSerialization() {
         return serialization;
+    }
+
+    public void setSerialization(String serialization) {
+        this.serialization = serialization;
     }
 
     public Integer getSlaveNettyServerPort() {
         return slaveNettyServerPort;
     }
 
+    public void setSlaveNettyServerPort(Integer slaveNettyServerPort) {
+        this.slaveNettyServerPort = slaveNettyServerPort;
+    }
+
     public Integer getSlaveBusinessThreadCount() {
         return slaveBusinessThreadCount;
     }
 
+    public void setSlaveBusinessThreadCount(Integer slaveBusinessThreadCount) {
+        this.slaveBusinessThreadCount = slaveBusinessThreadCount;
+    }
+
     public Integer getXhakaMsgMaxLength() {
-        return XhakaMsgMaxLength;
+        return xhakaMsgMaxLength;
+    }
+
+    public void setXhakaMsgMaxLength(Integer xhakaMsgMaxLength) {
+        xhakaMsgMaxLength = xhakaMsgMaxLength;
+    }
+
+    public String getLoadBalance() {
+        return loadBalance;
+    }
+
+    public void setLoadBalance(String loadBalance) {
+        this.loadBalance = loadBalance;
+    }
+
+    public Integer getSlaveResponseTimeout() {
+        return slaveResponseTimeout;
+    }
+
+    public void setSlaveResponseTimeout(Integer slaveResponseTimeOut) {
+        this.slaveResponseTimeout = slaveResponseTimeOut;
     }
 }

@@ -32,7 +32,7 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
 
     private FullHttpResponse originResponse;
 
-    private XhakaServletOutputSteam xhakaServletOutputSteam;
+    private XhakaServletOutputStream xhakaServletOutputSteam;
 
     private ChannelHandlerContext ctx;
 
@@ -62,10 +62,20 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
     public XhakaHttpServletResponse(XhakaHttpServletRequest requestFacade, ChannelHandlerContext ctx) {
         this.requestFacade = requestFacade;
         ByteBuf directBuffer = PooledByteBufAllocator.DEFAULT.directBuffer();
-        this.xhakaServletOutputSteam = new XhakaServletOutputSteam(this, directBuffer);
+        this.xhakaServletOutputSteam = new XhakaServletOutputStream(this, directBuffer);
         this.ctx = ctx;
 
         this.originResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, directBuffer);
+        this.printWriter = new PrintWriter(xhakaServletOutputSteam);
+        this.cookies = new ArrayList<>();
+    }
+
+    public XhakaHttpServletResponse(XhakaHttpServletRequest requestFacade, FullHttpResponse fullHttpResponse, ChannelHandlerContext ctx) {
+        this.requestFacade = requestFacade;
+        this.xhakaServletOutputSteam = new XhakaServletOutputStream(this, fullHttpResponse.content());
+        this.ctx = ctx;
+
+        this.originResponse = fullHttpResponse;
         this.printWriter = new PrintWriter(xhakaServletOutputSteam);
         this.cookies = new ArrayList<>();
     }

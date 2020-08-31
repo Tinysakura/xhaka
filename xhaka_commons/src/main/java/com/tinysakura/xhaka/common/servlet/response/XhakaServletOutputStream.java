@@ -15,7 +15,7 @@ import java.io.IOException;
  * @Date: 2020/8/21
  */
 
-public class XhakaServletOutputSteam extends ServletOutputStream {
+public class XhakaServletOutputStream extends ServletOutputStream {
     private ByteBufOutputStream byteBufOutputStream;
     private XhakaHttpServletResponse xhakaHttpServletResponse;
     private ByteBuf pooledDirectByteBuf;
@@ -23,7 +23,7 @@ public class XhakaServletOutputSteam extends ServletOutputStream {
     private boolean flushed = false;
     private boolean closed = false;
 
-    public XhakaServletOutputSteam(XhakaHttpServletResponse response, ByteBuf byteBuf) {
+    public XhakaServletOutputStream(XhakaHttpServletResponse response, ByteBuf byteBuf) {
         this.xhakaHttpServletResponse = response;
         this.pooledDirectByteBuf = byteBuf;
         this.byteBufOutputStream = new ByteBufOutputStream(pooledDirectByteBuf);

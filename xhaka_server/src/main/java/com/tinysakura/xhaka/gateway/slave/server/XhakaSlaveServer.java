@@ -1,8 +1,8 @@
-package com.tinysakura.xhaka.gateway.remote.server;
+package com.tinysakura.xhaka.gateway.slave.server;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaHttpServletHandler;
-import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaProtocolHandler;
+import com.tinysakura.xhaka.common.gateway.handler.XhakaProtocolHandler;
 import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpResponse2XhakaEncoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.Xhaka2FulHttpRequestDecoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaDecoder;
@@ -54,7 +54,7 @@ public class XhakaSlaveServer implements WebServer {
                         socketChannel.pipeline()
                                 .addLast(new XhakaDecoder(XhakaGateWayConfig.getInstance().getXhakaMsgMaxLength(), 0, 4))
                                 //处理xhaka协议
-                                .addLast(new SlaveXhakaProtocolHandler())
+                                .addLast(new XhakaProtocolHandler())
                                 //处理xhaka协议转换的http request
                                 .addLast(new Xhaka2FulHttpRequestDecoder())
                                 //将FullHttpRequest转换为适配Servlet容器的xhakaHttpServletRequest

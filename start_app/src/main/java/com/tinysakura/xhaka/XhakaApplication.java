@@ -1,7 +1,7 @@
 package com.tinysakura.xhaka;
 
 import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
-import com.tinysakura.xhaka.core.webserver.XhakaWebServer;
+import com.tinysakura.xhaka.core.bootstrap.XhakaWebServer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

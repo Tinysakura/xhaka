@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.core.webserver;
+package com.tinysakura.xhaka.core.bootstrap;
 
 import com.tinysakura.xhaka.common.handler.FullHttpRequest2HttpServletHandler;
 import com.tinysakura.xhaka.common.handler.XhakaHttpServletHandler;
@@ -61,10 +61,8 @@ public class XhakaWebServer implements WebServer {
                         socketChannel.pipeline().addLast(new HttpServerCodec())
                                 .addLast(new HttpObjectAggregator(100 * 1024))
                                 .addLast(new ChunkedWriteHandler())
-                                //.addLast(new Http2XhakaCodec())
                                 .addLast(new FullHttpRequest2HttpServletHandler())
                                 .addLast(businessGroup, new XhakaHttpServletHandler());
-                                //.addLast(businessGroup, new XhakaProtocalHandler());
                     }
                 }).bind(inetSocketAddress).awaitUninterruptibly();
 

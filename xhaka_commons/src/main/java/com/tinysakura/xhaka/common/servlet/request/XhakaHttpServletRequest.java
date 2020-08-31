@@ -106,6 +106,10 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     }
 
+    public void addHeader(String name, Object value) {
+        this.headers.add(name, value);
+    }
+
     @Override
     public String getHeader(String name) {
         return this.headers.get(name);
