@@ -80,6 +80,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
                     }
                 }
             });
+            pathChildrenCache.start();
         } catch (Exception e) {
             log.error("XhakaServerBootstrap run occur error", e);
         }
