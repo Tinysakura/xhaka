@@ -22,7 +22,10 @@ public class XhakaSlaveBootstrap implements ApplicationRunner, ApplicationContex
             serverName = applicationContext.getEnvironment().getProperty("spring.application.name");
         }
 
-        new XhakaSlaveServer(serverName).start();
+        final String finalServerName = serverName;
+        new Thread(() -> {
+            new XhakaSlaveServer(finalServerName).start();
+        }, "thread-xhaka-slave-main").start();
     }
 
     @Override
