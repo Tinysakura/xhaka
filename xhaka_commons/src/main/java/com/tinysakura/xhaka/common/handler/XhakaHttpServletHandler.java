@@ -3,6 +3,7 @@ package com.tinysakura.xhaka.common.handler;
 import com.tinysakura.xhaka.common.filter.XhakaFilterChainFactory;
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.constant.XhakaHttpHeaderConstant;
+import com.tinysakura.xhaka.common.gateway.exception.XhakaSlaveTimeoutException;
 import com.tinysakura.xhaka.common.gateway.remote.core.GatewaySlaveChannelPool;
 import com.tinysakura.xhaka.common.gateway.future.XhakaFuture;
 import com.tinysakura.xhaka.common.gateway.remote.route.ServerDispatcher;
@@ -50,7 +51,13 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
          * thread block util gateway slave return response
          * this channel run in standard business thread group, not affect io thread group
          */
-        FullHttpResponse fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
+        FullHttpResponse fullHttpResponse = null;
+        try {
+            fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
+        } catch (XhakaSlaveTimeoutException e) {
+            ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.REQUEST_TIMEOUT));
+        }
+
         HttpServletResponse httpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, fullHttpResponse, ctx);
 
         httpServletResponse.getOutputStream().flush();

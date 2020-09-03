@@ -37,7 +37,7 @@ public class XhakaFuture {
                 lock.lock();
 
                 while (!isReceivedResponse()) {
-                    done.await(timeout, TimeUnit.MILLISECONDS);
+                    done.await(timeout, TimeUnit.SECONDS);
                     if (isReceivedResponse() || System.currentTimeMillis() - start > timeout) {
                         break;
                     }
