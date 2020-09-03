@@ -69,11 +69,11 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
                 public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                     switch (event.getType()) {
                         case CHILD_ADDED:
-                            log.info("child_added");
+                            log.info("child_added:{}", event.getData().getPath());
                             handleChildPath(event.getData().getPath(), true, false);
                             return;
                         case CHILD_REMOVED:
-                            log.info("child_removed");
+                            log.info("child_removed:{}", event.getData().getPath());
                             handleChildPath(event.getData().getPath(), false, true);
                             return;
                         default:
@@ -87,6 +87,8 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
     }
 
     private void handleChildPath(String childPath, boolean added, boolean removed) {
+        childPath = childPath.replace(XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH, "");
+
         int i = childPath.indexOf("_");
         if (i == -1) {
             log.error("invalid childPath");

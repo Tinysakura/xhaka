@@ -53,6 +53,7 @@ public class XhakaGatewayClientThreadPool {
         }
 
         executorService.submit(runnable);
+        ipSet.add(name);
     }
 
     public static class XhakaGatewayClientRunnable implements Runnable {
@@ -76,7 +77,7 @@ public class XhakaGatewayClientThreadPool {
         }
 
         String getName() {
-            return "XhakaGatewayClient_" + serverName + "_" + host + ":" + port;
+            return "XhakaGatewayClient_" + serverName;
         }
 
         @Override

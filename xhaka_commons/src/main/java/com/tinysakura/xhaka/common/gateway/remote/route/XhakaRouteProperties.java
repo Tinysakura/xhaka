@@ -13,6 +13,12 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "xhaka")
 public class XhakaRouteProperties {
 
+    private static XhakaRouteProperties instance;
+
+    public XhakaRouteProperties() {
+        instance = this;
+    }
+
     private Map<String, Route> routes;
 
     public Map<String, Route> getRoutes() {
@@ -21,6 +27,10 @@ public class XhakaRouteProperties {
 
     public void setRoutes(Map<String, Route> routes) {
         this.routes = routes;
+    }
+
+    public static XhakaRouteProperties getInstance() {
+        return instance;
     }
 
     public static class Route {
