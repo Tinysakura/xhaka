@@ -9,6 +9,7 @@ import org.apache.tomcat.util.descriptor.web.FilterMap;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.lang.reflect.Field;
@@ -18,6 +19,7 @@ import java.lang.reflect.Field;
  * @Date: 2020/8/28
  */
 @Slf4j
+@Component
 public class TomcatServletContext implements ApplicationContextAware {
     private FilterMap[] filterMaps;
 

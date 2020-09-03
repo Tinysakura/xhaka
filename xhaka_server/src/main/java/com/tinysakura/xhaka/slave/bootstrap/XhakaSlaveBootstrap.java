@@ -6,12 +6,13 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/31
  */
-
+@Component
 public class XhakaSlaveBootstrap implements ApplicationRunner, ApplicationContextAware {
     private ApplicationContext applicationContext;
 
