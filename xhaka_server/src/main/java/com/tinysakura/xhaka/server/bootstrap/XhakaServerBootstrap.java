@@ -69,11 +69,11 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
                 public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                     switch (event.getType()) {
                         case CHILD_ADDED:
-                            log.debug("child_added");
+                            log.info("child_added");
                             handleChildPath(event.getData().getPath(), true, false);
                             return;
                         case CHILD_REMOVED:
-                            log.debug("child_removed");
+                            log.info("child_removed");
                             handleChildPath(event.getData().getPath(), false, true);
                             return;
                         default:

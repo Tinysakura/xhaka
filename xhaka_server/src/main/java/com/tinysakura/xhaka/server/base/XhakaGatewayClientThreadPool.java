@@ -2,6 +2,7 @@ package com.tinysakura.xhaka.server.base;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.server.bootstrap.XhakaGatewayClient;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.concurrent.*;
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/31
  */
-
+@Slf4j
 public class XhakaGatewayClientThreadPool {
 
     private static final ExecutorService executorService;
@@ -46,6 +47,7 @@ public class XhakaGatewayClientThreadPool {
     public static synchronized void submit(Runnable runnable) {
         assert runnable instanceof XhakaGatewayClientRunnable;
         String name = ((XhakaGatewayClientRunnable) runnable).getName();
+        log.info("submit runnable name:{}", name);
         if (ipSet.contains(name)) {
             return;
         }
