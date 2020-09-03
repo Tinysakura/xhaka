@@ -7,8 +7,5 @@ package com.tinysakura.xhaka.common.gateway.discovery.constant;
  */
 
 public class XhakaDiscoveryConstant {
-
-    public static final String REGISTER_SERVER_PARENT_PATH = "";
-
-    public static final String REGISTER_SERVER_INSTANCE_IP_SEPARATOR = ",";
+    public static final String REGISTER_SERVER_PARENT_PATH = "/xhaka/slave";
 }

@@ -65,7 +65,7 @@ public class XhakaGatewayClient {
 
         ChannelFuture f = bootstrap.connect(new InetSocketAddress(remoteHost, remotePort));
         try {
-            GatewaySlaveChannelPool.getInstance().addSlaveChannelIntoPool(serverName, f.channel());
+            GatewaySlaveChannelPool.getInstance().addSlaveChannelIntoPool(serverName, remoteHost, remotePort, f.channel());
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("XhakaGatewayClient remoteHost:{}, remotePort:{} occur error", remoteHost, remotePort, e);

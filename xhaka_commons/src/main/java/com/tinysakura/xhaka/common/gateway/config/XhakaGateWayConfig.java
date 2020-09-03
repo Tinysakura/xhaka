@@ -1,18 +1,20 @@
 package com.tinysakura.xhaka.common.gateway.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/25
  */
 @ConfigurationProperties(prefix = "xhaka.gateway")
+@Component
 public class XhakaGateWayConfig {
 
     /**
      * 网关代理服务注册地址(默认使用zk)
      */
-    private String discoveryHost;
+    private String discoveryAddress;
 
     /**
      * xhaka协议体序列化方式
@@ -42,18 +44,19 @@ public class XhakaGateWayConfig {
     public static XhakaGateWayConfig instance;
 
     public XhakaGateWayConfig() {
+        instance = this;
     }
 
     public static XhakaGateWayConfig getInstance() {
         return instance;
     }
 
-    public String getDiscoveryHost() {
-        return discoveryHost;
+    public String getDiscoveryAddress() {
+        return discoveryAddress;
     }
 
-    public void setDiscoveryHost(String discoveryHost) {
-        this.discoveryHost = discoveryHost;
+    public void setDiscoveryAddress(String discoveryAddress) {
+        this.discoveryAddress = discoveryAddress;
     }
 
     public String getSerialization() {

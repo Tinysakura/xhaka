@@ -3,6 +3,7 @@ package com.tinysakura.xhaka.server.bootstrap;
 import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
 import com.tinysakura.xhaka.common.gateway.discovery.constant.XhakaDiscoveryConstant;
 import com.tinysakura.xhaka.common.gateway.discovery.util.ZookeeperUtils;
+import com.tinysakura.xhaka.common.gateway.remote.core.GatewaySlaveChannelPool;
 import com.tinysakura.xhaka.server.base.XhakaGatewayClientThreadPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,10 +16,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,10 +58,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
             List<String> childPaths = zkClient.getChildren().forPath(XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH);
             if (!CollectionUtils.isEmpty(childPaths)) {
                 for (String childPath : childPaths) {
-                    String tmp = XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH + childPath;
-                    byte[] content = zkClient.getData().forPath(tmp);
-
-                    handleChildPath(tmp, content);
+                    handleChildPath(childPath, true, false);
                 }
             }
 
@@ -73,10 +69,10 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
                 public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                     switch (event.getType()) {
                         case CHILD_ADDED:
-                            handleChildPath(event.getData().getPath(), event.getData().getData());
+                            handleChildPath(event.getData().getPath(), true, false);
                             return;
-                        case CHILD_UPDATED:
-                            handleChildPath(event.getData().getPath(), event.getData().getData());
+                        case CHILD_REMOVED:
+                            handleChildPath(event.getData().getPath(), false, true);
                             return;
                         default:
                     }
@@ -87,17 +83,27 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
         }
     }
 
-    private void handleChildPath(String childPath, byte[] content) {
-        String pathContent = new String(content, Charset.forName("UTF-8"));
-        String[] ipList = pathContent.split(XhakaDiscoveryConstant.REGISTER_SERVER_INSTANCE_IP_SEPARATOR);
-        for (String ip : ipList) {
-            String[] split = ip.split(":");
-            if (split.length != 2) {
-                log.error("invalid ip : {}", ip);
-                continue;
-            }
+    private void handleChildPath(String childPath, boolean added, boolean removed) {
+        int i = childPath.indexOf("_");
+        if (i == -1) {
+            log.error("invalid childPath");
+            return;
+        }
 
+        String ip = childPath.substring(i, childPath.length());
+        String[] split = ip.split(":");
+        if (split.length != 2) {
+            log.error("invalid ip : {}", ip);
+            return;
+        }
+
+        if (added && !removed) {
             XhakaGatewayClientThreadPool.submit(new XhakaGatewayClientThreadPool.XhakaGatewayClientRunnable(childPath, split[0], Integer.valueOf(split[1])));
+        }
+
+        if (!removed && added) {
+            String serverName = childPath.substring(0, i);
+            GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, split[0], Integer.valueOf(split[1]));
         }
     }
 

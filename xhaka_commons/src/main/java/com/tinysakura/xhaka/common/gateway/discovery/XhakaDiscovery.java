@@ -4,9 +4,8 @@ import com.tinysakura.xhaka.common.gateway.discovery.constant.XhakaDiscoveryCons
 import com.tinysakura.xhaka.common.gateway.discovery.util.ZookeeperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
-
-import java.nio.charset.Charset;
 
 /**
  * @Author: chenfeihao@corp.netease.com
@@ -17,20 +16,23 @@ public class XhakaDiscovery {
 
     public static void registerXhaka(String serverName, String host, Integer port) {
         try {
-            String zkPath = XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH + "/" + serverName;
+            String slaveInstanceChildPath =host + ":" + port;
+            String zkPath = XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH + "/" + serverName + "_" + slaveInstanceChildPath;
 
             CuratorFramework zkClient = ZookeeperUtils.getZooKeeper();
 
             Stat stat = zkClient.checkExists().forPath(zkPath);
 
             if (stat == null) {
-                zkClient.create().creatingParentsIfNeeded().forPath(zkPath);
-                zkClient.setData().forPath(zkPath,(host + ":" + port).getBytes(Charset.forName("UTF-8")));
-            } else {
-                String old = new String(zkClient.getData().forPath(zkPath), Charset.forName("UTF-8"));
-                old += host + ":" + port;
-                zkClient.setData().forPath(zkPath, old.getBytes(Charset.forName("UTF-8")));
+                zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(zkPath);
+                //zkClient.setData().forPath(zkPath,(host + ":" + port).getBytes(Charset.forName("UTF-8")));
             }
+
+//            else {
+//                String old = new String(zkClient.getData().forPath(zkPath), Charset.forName("UTF-8"));
+//                old += host + ":" + port;
+//                zkClient.setData().forPath(zkPath, old.getBytes(Charset.forName("UTF-8")));
+//            }
 
             log.error("server:{} register success, ip:{}", serverName, host + ":" + port);
         } catch (Exception e) {

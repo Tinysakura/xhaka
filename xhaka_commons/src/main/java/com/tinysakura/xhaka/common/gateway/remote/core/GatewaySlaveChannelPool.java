@@ -10,9 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -31,7 +29,7 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
      */
     private ReentrantReadWriteLock reentrantReadWriteLock;
 
-    private Map<String, List<Channel>> slaveChannelPoolMap;
+    private Map<String, Map<String, Channel>> slaveChannelPoolMap;
 
     private ApplicationContext applicationContext;
 
@@ -54,23 +52,44 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
         return instance;
     }
 
-    public void addSlaveChannelIntoPool(String serverName, Channel channel) {
+    public void addSlaveChannelIntoPool(String serverName, String remoteHost, Integer remotePort, Channel channel) {
         reentrantReadWriteLock.writeLock().lock();
 
         try {
-            List<Channel> channels = this.slaveChannelPoolMap.get(serverName);
-            if (channels == null) {
-                channels = new ArrayList<>();
+            Map<String, Channel> channelMap = this.slaveChannelPoolMap.get(serverName);
+            if (channelMap == null) {
+                channelMap = new HashMap<>();
             }
 
-            channels.add(channel);
+            String channelTag = remoteHost + ":" + remotePort;
+            channelMap.put(channelTag, channel);
 
-            this.slaveChannelPoolMap.put(serverName, channels);
+            this.slaveChannelPoolMap.put(serverName, channelMap);
         } catch (Exception e) {
             log.error("add slave channel into pool occur exception", e);
         } finally {
             reentrantReadWriteLock.writeLock().unlock();
         }
+    }
+
+    public void removeSlaveChannelFromPool(String serverName, String remoteHost, Integer remotePort) {
+        reentrantReadWriteLock.writeLock().lock();
+
+        try {
+            Map<String, Channel> channelMap = this.slaveChannelPoolMap.get(serverName);
+            if (channelMap == null) {
+                log.warn("removeSlaveChannelFromPool may invalid serverName:{}", serverName);
+                return;
+            }
+
+            String channelTag = remoteHost + ":" + remotePort;
+            channelMap.remove(channelTag);
+        } catch (Exception e) {
+            log.error("remove slave channel from pool occur exception", e);
+        } finally {
+            reentrantReadWriteLock.writeLock().unlock();
+        }
+
     }
 
     public Channel getSlaveChannelByLoadBalanceStrategy(String strategyName, String serverName) {
@@ -86,7 +105,7 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
         this.reentrantReadWriteLock.readLock().lock();
 
         try {
-            return loadBalanceStrategy.selectChannel(serverName);
+            return loadBalanceStrategy.selectChannel(this.slaveChannelPoolMap.get(serverName));
         } catch (Exception e) {
             log.error("get slave channel from pool occur exception", e);
         } finally {

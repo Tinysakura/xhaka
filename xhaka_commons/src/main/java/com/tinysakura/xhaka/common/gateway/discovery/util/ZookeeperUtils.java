@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka.common.gateway.discovery.util;
 
+import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -7,7 +8,6 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,8 +22,8 @@ public class ZookeeperUtils implements BeanFactoryAware {
 
     private static CuratorFramework S_ZOOKEEPER       = null;
 
-    @Value("${xhaka.gateway.discovery.zk.connectStr}")
-    private String                  connectStr;
+//    @Value("${xhaka.gateway.discovery.zk.connectStr}")
+//    private String                  connectStr;
     private int                     sessionTimeout    = 60000;
     private int                     baseSleepTimeMs   = 60000;
     private int                     maxTryCount       = 3;
@@ -39,9 +39,11 @@ public class ZookeeperUtils implements BeanFactoryAware {
                 return S_ZOOKEEPER;
             }
 
-            assert S_INSTANCE.connectStr != null;
+            String connectStr = XhakaGateWayConfig.getInstance().getDiscoveryAddress();
 
-            CuratorFramework client = CuratorFrameworkFactory.builder().connectString(S_INSTANCE.connectStr).sessionTimeoutMs(S_INSTANCE.sessionTimeout).connectionTimeoutMs(S_INSTANCE.connectionTimeout).retryPolicy(new ExponentialBackoffRetry(
+            assert connectStr != null;
+
+            CuratorFramework client = CuratorFrameworkFactory.builder().connectString(connectStr).sessionTimeoutMs(S_INSTANCE.sessionTimeout).connectionTimeoutMs(S_INSTANCE.connectionTimeout).retryPolicy(new ExponentialBackoffRetry(
                     S_INSTANCE.baseSleepTimeMs,
                     S_INSTANCE.maxTryCount)).build();
 
@@ -49,12 +51,11 @@ public class ZookeeperUtils implements BeanFactoryAware {
                 client.start();
                 S_ZOOKEEPER = client;
             } else {
-                throw new RuntimeException("zookeeper create fail.connectUrl:" + S_INSTANCE.connectStr);
+                throw new RuntimeException("zookeeper create fail.connectUrl:" + connectStr);
             }
 
-            log.info("zookeeper create successfully .connectUrl:" + S_INSTANCE.connectStr);
+            log.info("zookeeper create successfully .connectUrl:" + connectStr);
             return S_ZOOKEEPER;
-
         }
 
     }
@@ -62,14 +63,6 @@ public class ZookeeperUtils implements BeanFactoryAware {
     @Override
     public void setBeanFactory(BeanFactory arg0) throws BeansException {
         S_INSTANCE = arg0.getBean("zookeeperUtils", ZookeeperUtils.class);
-    }
-
-    public String getConnectStr() {
-        return connectStr;
-    }
-
-    public void setConnectStr(String connectStr) {
-        this.connectStr = connectStr;
     }
 
     public int getSessionTimeout() {
