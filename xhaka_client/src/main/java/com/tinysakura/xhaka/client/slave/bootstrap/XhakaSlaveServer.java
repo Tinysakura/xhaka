@@ -63,7 +63,7 @@ public class XhakaSlaveServer implements WebServer {
                         socketChannel.pipeline()
                                 .addLast(new XhakaDecoder(XhakaGateWayConfig.getInstance().getXhakaMsgMaxLength(), 0, 4))
                                 //处理xhaka协议
-                                .addLast(new XhakaProtocolHandler())
+                                .addLast(new XhakaProtocolHandler(true))
                                 //处理xhaka协议转换的http request
                                 .addLast(new Xhaka2FulHttpRequestDecoder())
                                 //将FullHttpRequest转换为适配Servlet容器的xhakaHttpServletRequest
