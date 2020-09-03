@@ -101,7 +101,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
             XhakaGatewayClientThreadPool.submit(new XhakaGatewayClientThreadPool.XhakaGatewayClientRunnable(childPath, split[0], Integer.valueOf(split[1])));
         }
 
-        if (!removed && added) {
+        if (!added && removed) {
             String serverName = childPath.substring(0, i);
             GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, split[0], Integer.valueOf(split[1]));
         }

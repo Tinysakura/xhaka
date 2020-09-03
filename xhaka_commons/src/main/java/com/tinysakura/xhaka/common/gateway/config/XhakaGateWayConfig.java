@@ -88,7 +88,7 @@ public class XhakaGateWayConfig {
     }
 
     public void setXhakaMsgMaxLength(Integer xhakaMsgMaxLength) {
-        xhakaMsgMaxLength = xhakaMsgMaxLength;
+        this.xhakaMsgMaxLength = xhakaMsgMaxLength;
     }
 
     public String getLoadBalance() {
