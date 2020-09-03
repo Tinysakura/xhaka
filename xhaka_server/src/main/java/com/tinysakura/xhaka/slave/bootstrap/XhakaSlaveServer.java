@@ -21,7 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.server.WebServerException;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 /**
  * 被网关代理的服务在本地启动的nettyServer
@@ -81,7 +83,13 @@ public class XhakaSlaveServer implements WebServer {
 
         // 开启netty server端口后，将自己注册到zk，xhaka网关会监听到zk节点的变化发起与该代理服务的连接
         InetSocketAddress localAddress = (InetSocketAddress) future.channel().localAddress();
-        XhakaDiscovery.registerXhaka(serverName, localAddress.getHostString(), localAddress.getPort());
+
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            XhakaDiscovery.registerXhaka(serverName, addr.getHostAddress(), localAddress.getPort());
+        } catch (UnknownHostException e) {
+            log.error("obtain localAddress failed", e);
+        }
 
         log.info("start xhaka slave server on port:{}", getPort());
     }
