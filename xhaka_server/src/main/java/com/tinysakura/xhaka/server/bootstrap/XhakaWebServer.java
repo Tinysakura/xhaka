@@ -1,7 +1,7 @@
 package com.tinysakura.xhaka.server.bootstrap;
 
 import com.tinysakura.xhaka.common.handler.FullHttpRequest2HttpServletHandler;
-import com.tinysakura.xhaka.common.handler.XhakaHttpServletHandler;
+import com.tinysakura.xhaka.server.handler.XhakaHttpServletHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

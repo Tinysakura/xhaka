@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.common.gateway.remote.core;
+package com.tinysakura.xhaka.server.context;
 
 import com.tinysakura.xhaka.common.gateway.remote.nlb.LoadBalanceStrategy;
 import com.tinysakura.xhaka.common.gateway.remote.nlb.constant.LoadBalanceStrategyConstant;
@@ -77,6 +77,7 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
 
             String channelTag = remoteHost + ":" + remotePort;
             channelMap.remove(channelTag);
+            XhakaGatewayClientThreadPool.removeIpSet("XhakaGatewayClient_" + serverName);
         } catch (Exception e) {
             log.error("remove slave channel from pool occur exception", e);
         } finally {

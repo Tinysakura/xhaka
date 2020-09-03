@@ -1,15 +1,15 @@
-package com.tinysakura.xhaka.common.handler;
+package com.tinysakura.xhaka.server.handler;
 
 import com.tinysakura.xhaka.common.filter.XhakaFilterChainFactory;
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.constant.XhakaHttpHeaderConstant;
 import com.tinysakura.xhaka.common.gateway.exception.XhakaSlaveTimeoutException;
-import com.tinysakura.xhaka.common.gateway.remote.core.GatewaySlaveChannelPool;
 import com.tinysakura.xhaka.common.gateway.future.XhakaFuture;
 import com.tinysakura.xhaka.common.gateway.remote.route.ServerDispatcher;
 import com.tinysakura.xhaka.common.gateway.remote.util.GlobalCounterUtil;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import com.tinysakura.xhaka.common.servlet.response.XhakaHttpServletResponse;
+import com.tinysakura.xhaka.server.context.GatewaySlaveChannelPool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

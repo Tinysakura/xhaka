@@ -1,13 +1,13 @@
 package com.tinysakura.xhaka.server.bootstrap;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
-import com.tinysakura.xhaka.common.gateway.remote.core.GatewaySlaveChannelPool;
 import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaHttpServletResponsehHandler;
 import com.tinysakura.xhaka.common.gateway.handler.XhakaProtocolHandler;
 import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpRequest2XhakaEncoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.Xhaka2FullHttpResponseDecoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaDecoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaEncoder;
+import com.tinysakura.xhaka.server.context.GatewaySlaveChannelPool;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

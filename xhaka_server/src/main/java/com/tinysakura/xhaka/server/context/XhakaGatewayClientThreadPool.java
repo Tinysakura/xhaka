@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.server.base;
+package com.tinysakura.xhaka.server.context;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.server.bootstrap.XhakaGatewayClient;
@@ -54,6 +54,10 @@ public class XhakaGatewayClientThreadPool {
 
         executorService.submit(runnable);
         ipSet.add(name);
+    }
+
+    public static void removeIpSet(String value) {
+        ipSet.remove(value);
     }
 
     public static class XhakaGatewayClientRunnable implements Runnable {
