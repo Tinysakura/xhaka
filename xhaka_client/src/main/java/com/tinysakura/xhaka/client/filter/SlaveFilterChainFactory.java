@@ -1,7 +1,8 @@
-package com.tinysakura.xhaka.common.filter;
+package com.tinysakura.xhaka.client.filter;
 
-import com.tinysakura.xhaka.common.context.TomcatServletContext;
-import com.tinysakura.xhaka.common.util.ServletFilterUtils;
+import com.tinysakura.xhaka.client.context.TomcatServletContext;
+import com.tinysakura.xhaka.client.util.ServletFilterUtils;
+import com.tinysakura.xhaka.common.filter.FilterChainImpl;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
 import org.springframework.stereotype.Component;

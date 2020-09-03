@@ -1,8 +1,8 @@
-package com.tinysakura.xhaka.slave.bootstrap;
+package com.tinysakura.xhaka.client.slave.bootstrap;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.discovery.XhakaDiscovery;
-import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaHttpServletHandler;
+import com.tinysakura.xhaka.client.handler.SlaveXhakaHttpServletHandler;
 import com.tinysakura.xhaka.common.gateway.handler.XhakaProtocolHandler;
 import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpResponse2XhakaEncoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.Xhaka2FulHttpRequestDecoder;

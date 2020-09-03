@@ -1,6 +1,6 @@
-package com.tinysakura.xhaka.common.configuration;
+package com.tinysakura.xhaka.client.slave.conf;
 
-import com.tinysakura.xhaka.common.context.TomcatServletContext;
+import com.tinysakura.xhaka.client.context.TomcatServletContext;
 import org.apache.catalina.core.StandardContext;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;

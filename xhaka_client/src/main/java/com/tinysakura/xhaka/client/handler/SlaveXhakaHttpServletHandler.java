@@ -1,6 +1,6 @@
-package com.tinysakura.xhaka.common.gateway.handler;
+package com.tinysakura.xhaka.client.handler;
 
-import com.tinysakura.xhaka.common.context.TomcatServletContext;
+import com.tinysakura.xhaka.client.context.TomcatServletContext;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

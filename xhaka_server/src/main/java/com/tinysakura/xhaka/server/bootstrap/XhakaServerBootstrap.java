@@ -90,7 +90,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
             return;
         }
 
-        String ip = childPath.substring(i, childPath.length());
+        String ip = childPath.substring(i + 1, childPath.length());
         String[] split = ip.split(":");
         if (split.length != 2) {
             log.error("invalid ip : {}", ip);

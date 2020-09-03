@@ -5,6 +5,7 @@ import com.tinysakura.xhaka.server.bootstrap.XhakaGatewayClient;
 
 import java.util.HashSet;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @Author: chenfeihao@corp.netease.com
@@ -17,6 +18,10 @@ public class XhakaGatewayClientThreadPool {
 
     private static final HashSet<String> ipSet;
 
+    private static final String THREAD_POOL_NAME = "xhaka_gateway_client";
+
+    private static final AtomicLong threadNum = new AtomicLong();
+
     static {
         ipSet = new HashSet<>();
 
@@ -28,7 +33,7 @@ public class XhakaGatewayClientThreadPool {
                 new LinkedBlockingQueue<>(), new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
-                return new Thread(r, ((XhakaGatewayClientRunnable) r).getName());
+                return new Thread(r, THREAD_POOL_NAME + "_" + threadNum.incrementAndGet());
             }
         });
     }
