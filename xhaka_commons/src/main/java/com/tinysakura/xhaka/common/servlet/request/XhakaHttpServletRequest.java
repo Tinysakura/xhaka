@@ -188,6 +188,10 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
         return uriParser.getRequestURI();
     }
 
+    public void setRequestURI(String uri) {
+        this.originalRequest.setUri(uri);
+    }
+
     @Override
     public StringBuffer getRequestURL() {
         StringBuffer url = new StringBuffer();

@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka.common.gateway.remote.route;
 
+import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -23,11 +24,14 @@ public class ServerDispatcher {
         ServerDispatcher.xhakaRouteProperties = xhakaRouteProperties;
     }
 
-    public static String getDispatcherServerName(HttpServletRequest httpServletRequest) {
+    public static String getDispatcherServerName(XhakaHttpServletRequest httpServletRequest) {
         String requestURI = httpServletRequest.getRequestURI();
 
         for (Map.Entry<String, XhakaRouteProperties.Route> entry : xhakaRouteProperties.getRoutes().entrySet()) {
             if (pathMatcher.match(entry.getValue().getUrl(), requestURI)) {
+                String matchBody = pathMatcher.extractPathWithinPattern(entry.getValue().getUrl(), requestURI);
+                httpServletRequest.setRequestURI("/" + matchBody);
+
                 return entry.getValue().getServerName();
             }
         }
