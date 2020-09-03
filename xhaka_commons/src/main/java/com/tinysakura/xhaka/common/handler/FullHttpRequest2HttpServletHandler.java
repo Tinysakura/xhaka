@@ -5,6 +5,7 @@ import com.tinysakura.xhaka.common.servlet.response.XhakaHttpServletResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
 
@@ -13,7 +14,7 @@ import java.nio.charset.Charset;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/21
  */
-
+@Slf4j
 public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     public static final FullHttpResponse DEFAULT_CONTINUE_FULLHTTP_RESPONSE = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE);
@@ -21,7 +22,7 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) throws Exception {
-
+        log.info("FullHttpRequest2HttpServletHandler, fullHttpRequest:{}", fullHttpRequest);
         XhakaHttpServletRequest xhakaHttpServletRequest = new XhakaHttpServletRequest(fullHttpRequest, ctx);
 
 //        byte[] a = new byte[fullHttpRequest.content().readableBytes()];

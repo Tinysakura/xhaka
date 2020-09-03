@@ -8,6 +8,7 @@ import com.tinysakura.xhaka.common.protocal.constant.XhakaHeaderConstant;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.handler.codec.http.FullHttpResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -16,11 +17,13 @@ import java.util.List;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/26
  */
-
+@Slf4j
 public class FullHttpResponse2XhakaEncoder extends MessageToMessageEncoder<FullHttpResponse> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, FullHttpResponse fullHttpResponse, List<Object> list) throws Exception {
+        log.info("FullHttpResponse2XhakaEncoder, fullHttpResponse:{}", fullHttpResponse);
+
         Xhaka xhaka = new Xhaka();
         xhaka.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_RESPONSE);
         xhaka.setXhakaId(Long.valueOf(fullHttpResponse.headers().get(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID)));

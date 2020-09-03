@@ -32,6 +32,8 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Xhaka xhaka) throws Exception {
+        log.info("XhakaProtocolHandler, xhaka:{}", xhaka);
+
         // 心跳响应不做后续处理
         if (XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART == xhaka.getPackType() && XhakaHeaderConstant.XHAKA_EVENT_TYPE_RESPONSE == xhaka.getEventType()) {
             log.info("receive gateway heart echo:{}", ctx.channel());
@@ -60,12 +62,12 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
         if (sendHeartPackPeriod) {
             scheduleExecutor = Executors.newScheduledThreadPool(1);
 
-            log.info("slave begin send heart pack,period:{}", HEART_PACK_SEND_PERIOD);
             Xhaka xhakaHeartReq = new Xhaka();
             xhakaHeartReq.setPackType(XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART);
             xhakaHeartReq.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST);
 
             scheduleExecutor.scheduleAtFixedRate(() -> {
+                log.info("slave begin send heart pack,period:{}", HEART_PACK_SEND_PERIOD);
                 ctx.writeAndFlush(xhakaHeartReq);
             }, 0L, HEART_PACK_SEND_PERIOD, TimeUnit.MILLISECONDS);
         }

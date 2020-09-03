@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -13,11 +14,12 @@ import java.util.List;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/26
  */
-
+@Slf4j
 public class XhakaEncoder extends MessageToMessageEncoder<Xhaka> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Xhaka xhaka, List<Object> list) throws Exception {
+        log.info("MessageToMessageEncoder, xhaka:{}", xhaka);
         ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(xhaka.getHeader().length + xhaka.getBody().length + 4);
 
         // 配合定长解码器避免粘包问题
