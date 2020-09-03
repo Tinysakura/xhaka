@@ -34,7 +34,7 @@ public class XhakaDiscovery {
 //                zkClient.setData().forPath(zkPath, old.getBytes(Charset.forName("UTF-8")));
 //            }
 
-            log.error("server:{} register success, ip:{}", serverName, host + ":" + port);
+            log.info("server:{} register success, ip:{}", serverName, host + ":" + port);
         } catch (Exception e) {
             log.error("server:{} register failed, ip:{}", serverName, host + ":" + port);
         }
