@@ -33,22 +33,15 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
 
     private ApplicationContext applicationContext;
 
-    private Map<String, LoadBalanceStrategy> loadBalanceStrategyMap = new HashMap<>();
+    private Map<String, LoadBalanceStrategy> loadBalanceStrategyMap;
 
     private GatewaySlaveChannelPool() {
         this.slaveChannelPoolMap = new HashMap<>();
         reentrantReadWriteLock = new ReentrantReadWriteLock();
+        instance = this;
     }
 
     public static GatewaySlaveChannelPool getInstance() {
-        if (instance == null) {
-            synchronized (GatewaySlaveChannelPool.class) {
-                if (instance == null) {
-                    instance = new GatewaySlaveChannelPool();
-                }
-            }
-        }
-
         return instance;
     }
 
@@ -93,9 +86,9 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
     }
 
     public Channel getSlaveChannelByLoadBalanceStrategy(String strategyName, String serverName) {
-        LoadBalanceStrategy loadBalanceStrategy = this.loadBalanceStrategyMap.get(strategyName);
+        LoadBalanceStrategy loadBalanceStrategy = loadBalanceStrategyMap.get(strategyName);
         if (loadBalanceStrategy == null) {
-            loadBalanceStrategy = this.loadBalanceStrategyMap.get(LoadBalanceStrategyConstant.LOAD_BALANCE_STRATEGY_RANDOM);
+            loadBalanceStrategy = loadBalanceStrategyMap.get(LoadBalanceStrategyConstant.LOAD_BALANCE_STRATEGY_RANDOM);
         }
 
         if (loadBalanceStrategy == null) {
@@ -115,13 +108,19 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
         return null;
     }
 
+    public Map<String, LoadBalanceStrategy> getLoadBalanceStrategyMap() {
+        return loadBalanceStrategyMap;
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        Map<String, LoadBalanceStrategy> loadBalanceStrategyMap = this.applicationContext.getBeansOfType(LoadBalanceStrategy.class);
-
-        for (LoadBalanceStrategy loadBalanceStrategy : loadBalanceStrategyMap.values()) {
-            this.loadBalanceStrategyMap.putIfAbsent(loadBalanceStrategy.getType(), loadBalanceStrategy);
+        loadBalanceStrategyMap = new HashMap<>();
+        Map<String, LoadBalanceStrategy> loadBalanceStrategyBeanMap = this.applicationContext.getBeansOfType(LoadBalanceStrategy.class);
+        for (LoadBalanceStrategy loadBalanceStrategy : loadBalanceStrategyBeanMap.values()) {
+            loadBalanceStrategyMap.put(loadBalanceStrategy.getType(), loadBalanceStrategy);
         }
+
+        log.info("debug:{}", loadBalanceStrategyMap.size());
     }
 
     @Override

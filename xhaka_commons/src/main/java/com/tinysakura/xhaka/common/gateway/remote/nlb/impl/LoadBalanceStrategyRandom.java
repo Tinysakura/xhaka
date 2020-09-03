@@ -3,6 +3,7 @@ package com.tinysakura.xhaka.common.gateway.remote.nlb.impl;
 import com.tinysakura.xhaka.common.gateway.remote.nlb.LoadBalanceStrategy;
 import com.tinysakura.xhaka.common.gateway.remote.nlb.constant.LoadBalanceStrategyConstant;
 import io.netty.channel.Channel;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Random;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/31
  */
-
+@Component
 public class LoadBalanceStrategyRandom implements LoadBalanceStrategy {
 
     private final Random random = new Random();

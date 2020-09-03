@@ -87,7 +87,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
     }
 
     private void handleChildPath(String childPath, boolean added, boolean removed) {
-        childPath = childPath.replace(XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH, "");
+        childPath = childPath.replace(XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH + "/", "");
 
         int i = childPath.indexOf("_");
         if (i == -1) {
@@ -103,7 +103,8 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
         }
 
         if (added && !removed) {
-            XhakaGatewayClientThreadPool.submit(new XhakaGatewayClientThreadPool.XhakaGatewayClientRunnable(childPath, split[0], Integer.valueOf(split[1])));
+            String serverName = childPath.substring(0, i);
+            XhakaGatewayClientThreadPool.submit(new XhakaGatewayClientThreadPool.XhakaGatewayClientRunnable(serverName, split[0], Integer.valueOf(split[1])));
         }
 
         if (!added && removed) {
