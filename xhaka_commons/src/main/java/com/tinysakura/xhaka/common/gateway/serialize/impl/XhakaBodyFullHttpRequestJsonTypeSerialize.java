@@ -32,7 +32,6 @@ public class XhakaBodyFullHttpRequestJsonTypeSerialize implements XhakaBodySeria
         jsonObject.put("method", originalBody.method().name());
         jsonObject.put("headers", headers);
 
-        originalBody.content().resetReaderIndex();
         byte[] body = new byte[originalBody.content().readableBytes()];
         originalBody.content().readBytes(body);
 
