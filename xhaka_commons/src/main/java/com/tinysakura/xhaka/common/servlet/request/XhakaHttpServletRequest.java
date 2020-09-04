@@ -173,8 +173,7 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     @Override
     public Principal getUserPrincipal() {
-        throw new IllegalStateException("getUserPrincipal not support");
-
+        return null;
     }
 
     @Override
@@ -551,7 +550,7 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     @Override
     public boolean isAsyncStarted() {
-        throw new IllegalStateException("not support async");
+        return false;
     }
 
     @Override
