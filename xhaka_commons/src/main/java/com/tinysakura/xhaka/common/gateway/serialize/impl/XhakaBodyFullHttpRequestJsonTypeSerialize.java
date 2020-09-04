@@ -57,6 +57,6 @@ public class XhakaBodyFullHttpRequestJsonTypeSerialize implements XhakaBodySeria
         ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(xhaka.getBodyLength());
         byteBuf.writeBytes(jsonObject.getBytes("body"));
 
-        return new DefaultFullHttpRequest(HttpVersion.HTTP_1_0, HttpMethod.valueOf(methodName), uri, byteBuf,null, httpHeaders);
+        return new DefaultFullHttpRequest(HttpVersion.HTTP_1_0, HttpMethod.valueOf(methodName), uri, byteBuf, httpHeaders, null);
     }
 }
