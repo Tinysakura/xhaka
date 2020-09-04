@@ -48,6 +48,7 @@ public class TomcatServletContext implements ApplicationContextAware {
             Field contextField = applicationContextFacade.getClass().getDeclaredField("context");
             contextField.setAccessible(true);
             org.apache.catalina.core.ApplicationContext tomcatApplicationContext = (org.apache.catalina.core.ApplicationContext) contextField.get(applicationContextFacade);
+            this.applicationContext = tomcatApplicationContext;
 
             Field standardContextField = tomcatApplicationContext.getClass().getDeclaredField("context");
             standardContextField.setAccessible(true);
