@@ -44,6 +44,7 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
 
         Long xhakaRequestSequence = GlobalCounterUtil.getXhakaRequestSequence();
         xhakaHttpServletRequest.addHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, xhakaRequestSequence);
+        xhakaHttpServletRequest.getOriginalRequest().content().retain();
         slaveChannel.writeAndFlush(xhakaHttpServletRequest.getOriginalRequest());
 
         XhakaFuture future = new XhakaFuture(xhakaRequestSequence);
