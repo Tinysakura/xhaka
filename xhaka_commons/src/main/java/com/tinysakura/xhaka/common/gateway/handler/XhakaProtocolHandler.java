@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka.common.gateway.handler;
 
+import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaEncoder;
 import com.tinysakura.xhaka.common.protocal.Xhaka;
 import com.tinysakura.xhaka.common.protocal.constant.XhakaHeaderConstant;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,6 +38,7 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
         // 心跳响应不做后续处理
         if (XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART == xhaka.getPackType() && XhakaHeaderConstant.XHAKA_EVENT_TYPE_RESPONSE == xhaka.getEventType()) {
             log.info("receive gateway heart echo:{}", ctx.channel());
+            return;
         }
 
         // 心跳请求发送心跳响应
@@ -44,7 +46,7 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
             Xhaka xhakaHeartRes = new Xhaka();
             xhakaHeartRes.setPackType(XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART);
             xhakaHeartRes.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST);
-            ctx.channel().writeAndFlush(xhakaHeartRes);
+            ctx.pipeline().get(XhakaEncoder.class).write(ctx, xhakaHeartRes, null);
         }
 
         // 正常请求就透传给后续handler处理
