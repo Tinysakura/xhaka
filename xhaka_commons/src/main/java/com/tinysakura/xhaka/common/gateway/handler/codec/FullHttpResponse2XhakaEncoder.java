@@ -36,6 +36,6 @@ public class FullHttpResponse2XhakaEncoder extends MessageToMessageEncoder<FullH
         xhaka.setBodyLength(fullHttpResponse.content().readableBytes());
         xhaka.setBody(body);
 
-        ctx.writeAndFlush(xhaka);
+        ctx.channel().writeAndFlush(xhaka);
     }
 }
