@@ -24,7 +24,6 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) throws Exception {
         log.info("FullHttpRequest2HttpServletHandler, fullHttpRequest:{}", fullHttpRequest);
         XhakaHttpServletRequest xhakaHttpServletRequest = new XhakaHttpServletRequest(fullHttpRequest, ctx);
-
 //        byte[] a = new byte[fullHttpRequest.content().readableBytes()];
 //        fullHttpRequest.content().readBytes(a);
 //        System.out.println(new String(a, Charset.forName("UTF-8")));
@@ -36,6 +35,7 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
             ctx.write(DEFAULT_CONTINUE_FULLHTTP_RESPONSE, ctx.voidPromise());
         }
 
+        fullHttpRequest.retain();
         ctx.fireChannelRead(xhakaHttpServletRequest);
     }
 
