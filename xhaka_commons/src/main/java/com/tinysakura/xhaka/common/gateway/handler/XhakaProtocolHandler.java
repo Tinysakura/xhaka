@@ -44,7 +44,7 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
             Xhaka xhakaHeartRes = new Xhaka();
             xhakaHeartRes.setPackType(XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART);
             xhakaHeartRes.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST);
-            ctx.writeAndFlush(xhakaHeartRes);
+            ctx.channel().writeAndFlush(xhakaHeartRes);
         }
 
         // 正常请求就透传给后续handler处理
@@ -68,7 +68,7 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
 
             scheduleExecutor.scheduleAtFixedRate(() -> {
                 log.info("slave begin send heart pack,period:{}", HEART_PACK_SEND_PERIOD);
-                ctx.writeAndFlush(xhakaHeartReq);
+                ctx.pipeline().writeAndFlush(xhakaHeartReq);
             }, 0L, HEART_PACK_SEND_PERIOD, TimeUnit.MILLISECONDS);
         }
     }
