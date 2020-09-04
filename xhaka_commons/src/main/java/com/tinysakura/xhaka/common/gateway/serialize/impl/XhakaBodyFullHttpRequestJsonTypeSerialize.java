@@ -48,15 +48,15 @@ public class XhakaBodyFullHttpRequestJsonTypeSerialize implements XhakaBodySeria
         String methodName = jsonObject.getString("method");
         Map<String, String> headers = jsonObject.getObject("headers", Map.class);
 
-        HttpHeaders httpHeaders = new DefaultHttpHeaders();
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            httpHeaders.add(entry.getKey(), entry.getValue());
-        }
-        httpHeaders.add(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, xhaka.getXhakaId());
-
         ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(xhaka.getBodyLength());
         byteBuf.writeBytes(jsonObject.getBytes("body"));
 
-        return new DefaultFullHttpRequest(HttpVersion.HTTP_1_0, HttpMethod.valueOf(methodName), uri, byteBuf, httpHeaders, null);
+        DefaultFullHttpRequest fullHttpRequest = new DefaultFullHttpRequest(HttpVersion.HTTP_1_0, HttpMethod.valueOf(methodName), uri, byteBuf);
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            fullHttpRequest.headers().add(entry.getKey(), entry.getValue());
+        }
+
+        fullHttpRequest.headers().add(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, xhaka.getXhakaId());
+        return fullHttpRequest;
     }
 }
