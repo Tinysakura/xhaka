@@ -21,7 +21,7 @@ import java.util.List;
 public class FullHttpResponse2XhakaEncoder extends MessageToMessageEncoder<FullHttpResponse> {
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, FullHttpResponse fullHttpResponse, List<Object> list) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, FullHttpResponse fullHttpResponse, List<Object> list) throws Exception {
         log.info("FullHttpResponse2XhakaEncoder, fullHttpResponse:{}", fullHttpResponse);
 
         Xhaka xhaka = new Xhaka();
@@ -36,6 +36,6 @@ public class FullHttpResponse2XhakaEncoder extends MessageToMessageEncoder<FullH
         xhaka.setBodyLength(fullHttpResponse.content().readableBytes());
         xhaka.setBody(body);
 
-        list.add(xhaka);
+        ctx.writeAndFlush(xhaka);
     }
 }

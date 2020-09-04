@@ -22,7 +22,7 @@ import java.util.List;
 public class FullHttpRequest2XhakaEncoder extends MessageToMessageEncoder<FullHttpRequest> {
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest, List<Object> list) {
+    protected void encode(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest, List<Object> list) {
         log.info("FullHttpRequest2XhakaEncoder fullHttpRequest:{}", fullHttpRequest);
 
         Xhaka xhaka = new Xhaka();
@@ -37,6 +37,6 @@ public class FullHttpRequest2XhakaEncoder extends MessageToMessageEncoder<FullHt
         xhaka.setBodyLength(fullHttpRequest.content().readableBytes());
         xhaka.setBody(body);
 
-        list.add(xhaka);
+        ctx.channel().writeAndFlush(xhaka);
     }
 }
