@@ -20,12 +20,21 @@ public class XhakaEncoder extends MessageToMessageEncoder<Xhaka> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Xhaka xhaka, List<Object> list) throws Exception {
         log.info("MessageToMessageEncoder, xhaka:{}", xhaka);
-        ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(xhaka.getHeader().length + xhaka.getBody().length + 4);
 
-        // 配合定长解码器避免粘包问题
-        byteBuf.writeInt(xhaka.getHeader().length + xhaka.getBody().length);
-        byteBuf.writeBytes(xhaka.getHeader());
-        byteBuf.writeBytes(xhaka.getBody());
+        ByteBuf byteBuf;
+        if (xhaka.getBody() != null) {
+            byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(xhaka.getHeader().length + xhaka.getBody().length + 4);
+
+            // 配合定长解码器避免粘包问题
+            byteBuf.writeInt(xhaka.getHeader().length + xhaka.getBody().length);
+            byteBuf.writeBytes(xhaka.getHeader());
+            byteBuf.writeBytes(xhaka.getBody());
+        } else { // 心跳包body可能为空
+            byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(xhaka.getHeader().length + 4);
+
+            byteBuf.writeInt(xhaka.getHeader().length);
+            byteBuf.writeBytes(xhaka.getHeader());
+        }
 
         list.add(byteBuf);
     }
