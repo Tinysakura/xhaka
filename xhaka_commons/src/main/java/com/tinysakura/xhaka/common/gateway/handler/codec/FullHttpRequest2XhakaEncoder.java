@@ -9,6 +9,7 @@ import com.tinysakura.xhaka.common.protocal.constant.XhakaHeaderConstant;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.handler.codec.http.FullHttpRequest;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -17,11 +18,13 @@ import java.util.List;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/31
  */
-
+@Slf4j
 public class FullHttpRequest2XhakaEncoder extends MessageToMessageEncoder<FullHttpRequest> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest, List<Object> list) {
+        log.info("FullHttpRequest2XhakaEncoder fullHttpRequest:{}", fullHttpRequest);
+
         Xhaka xhaka = new Xhaka();
         xhaka.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST);
         xhaka.setXhakaId(Long.valueOf(fullHttpRequest.headers().get(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID)));

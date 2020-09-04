@@ -21,6 +21,7 @@ public class XhakaDecoder extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+        log.info("XhakaDecoder ByteBuf:{}", in);
         ByteBuf frame = (ByteBuf) super.decode(ctx, in);
 
         //说明是半包，交由io线程继续读
