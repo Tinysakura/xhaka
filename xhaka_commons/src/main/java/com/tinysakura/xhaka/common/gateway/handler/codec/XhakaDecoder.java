@@ -4,13 +4,14 @@ import com.tinysakura.xhaka.common.protocal.Xhaka;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/26
  */
-
+@Slf4j
 public class XhakaDecoder extends LengthFieldBasedFrameDecoder {
 
     public XhakaDecoder(int maxFrameLength, int lengthFieldOffset,
@@ -29,6 +30,7 @@ public class XhakaDecoder extends LengthFieldBasedFrameDecoder {
 
         try {
             byte[] bytes = new byte[frame.readableBytes() - 4];
+            log.info("frame length:{}", frame.readInt());
             frame.readBytes(bytes);
 
             Xhaka xhaka = new Xhaka(ArrayUtils.subarray(bytes, 0, 13));
