@@ -45,7 +45,7 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
         if (XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART == xhaka.getPackType() && XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST == xhaka.getEventType()) {
             Xhaka xhakaHeartRes = new Xhaka();
             xhakaHeartRes.setPackType(XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART);
-            xhakaHeartRes.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST);
+            xhakaHeartRes.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_RESPONSE);
             ctx.pipeline().get(XhakaEncoder.class).write(ctx, xhakaHeartRes, ctx.voidPromise());
             ctx.flush();
             return;
