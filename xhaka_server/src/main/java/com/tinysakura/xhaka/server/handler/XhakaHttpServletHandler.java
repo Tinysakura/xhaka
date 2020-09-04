@@ -56,6 +56,7 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
             fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
         } catch (XhakaSlaveTimeoutException e) {
             ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.REQUEST_TIMEOUT));
+            return;
         }
 
         HttpServletResponse httpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, fullHttpResponse, ctx);
