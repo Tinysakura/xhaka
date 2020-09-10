@@ -8,6 +8,7 @@ import com.tinysakura.xhaka.common.protocal.Xhaka;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.handler.codec.http.*;
+import org.springframework.util.CollectionUtils;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -52,6 +53,11 @@ public class XhakaBodyFullHttpRequestJsonTypeSerialize implements XhakaBodySeria
         byteBuf.writeBytes(jsonObject.getBytes("body"));
 
         DefaultFullHttpRequest fullHttpRequest = new DefaultFullHttpRequest(HttpVersion.HTTP_1_0, HttpMethod.valueOf(methodName), uri, byteBuf);
+
+        if (CollectionUtils.isEmpty(headers)) {
+            return fullHttpRequest;
+        }
+
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             fullHttpRequest.headers().add(entry.getKey(), entry.getValue());
         }

@@ -7,6 +7,7 @@ import com.tinysakura.xhaka.common.protocal.Xhaka;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.handler.codec.http.*;
+import org.springframework.util.CollectionUtils;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -47,14 +48,19 @@ public class XhakaBodyFullHttpResponseJsonTypeSerialize implements XhakaBodySeri
         Integer statusCode = jsonObject.getInteger("status");
         Map<String, String> headers = jsonObject.getObject("headers", Map.class);
 
-        HttpHeaders httpHeaders = new DefaultHttpHeaders();
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            httpHeaders.add(entry.getKey(), entry.getValue());
-        }
 
         ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(xhaka.getBodyLength());
         byteBuf.writeBytes(jsonObject.getBytes("body"));
 
-        return new DefaultFullHttpResponse(HttpVersion.HTTP_1_0, HttpResponseStatus.valueOf(statusCode), byteBuf, httpHeaders, null);
+        DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_0, HttpResponseStatus.valueOf(statusCode), byteBuf);
+        if (CollectionUtils.isEmpty(headers)) {
+            return fullHttpResponse;
+        }
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            HttpHeaders httpHeaders = fullHttpResponse.headers();
+            httpHeaders.add(entry.getKey(), entry.getValue());
+        }
+
+        return fullHttpResponse;
     }
 }
