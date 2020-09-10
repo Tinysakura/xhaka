@@ -60,9 +60,9 @@ public class XhakaServletOutputStream extends ServletOutputStream {
         {
             xhakaHttpServletResponse.setResponseBasicHeader();
         }
-        boolean chunked = HttpUtil.isTransferEncodingChunked(xhakaHttpServletResponse.getOriginResponse());
+        //boolean chunked = HttpUtil.isTransferEncodingChunked(xhakaHttpServletResponse.getOriginResponse());
         ChannelHandlerContext ctx = xhakaHttpServletResponse.getCtx();
-        if (chunked && ctx.channel().isActive()) {
+        if (ctx.channel().isActive()) {
             if (!flushed) {
                 ctx.writeAndFlush(xhakaHttpServletResponse.getOriginResponse());
             }
