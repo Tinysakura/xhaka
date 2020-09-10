@@ -1,6 +1,7 @@
 package com.tinysakura.xhaka.common.gateway.serialize;
 
 import com.tinysakura.xhaka.common.gateway.serialize.impl.XhakaBodyFullHttpRequestJsonTypeSerialize;
+import com.tinysakura.xhaka.common.gateway.serialize.impl.XhakaBodyFullHttpResponseJsonTypeSerialize;
 import com.tinysakura.xhaka.common.protocal.constant.XhakaHeaderConstant;
 
 import java.util.HashMap;
@@ -20,8 +21,8 @@ public class XhakaBodySerializeFacade {
         xhakaRequestSerializerMap = new HashMap<>();
         xhakaRequestSerializerMap.put(XhakaHeaderConstant.XHAKA_SERIALIZATION_JSON, new XhakaBodyFullHttpRequestJsonTypeSerialize());
 
-
         xhakaResponseSerializerMap = new HashMap<>();
+        xhakaResponseSerializerMap.put(XhakaHeaderConstant.XHAKA_SERIALIZATION_JSON, new XhakaBodyFullHttpResponseJsonTypeSerialize());
     }
 
     public static XhakaBodySerialize findRequestSerializer(byte type) {
