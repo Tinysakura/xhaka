@@ -301,13 +301,16 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
 
         HttpHeaders headers = originResponse.headers();
         String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
-        if (null != contentType && contentType.toLowerCase().indexOf("charset") < 0) {
-            //Content Type 响应头的内容
+        if (StringUtils.isEmpty(contentType)) {
+            //Content Type 如果响应头为空，设置响应头的内容
             String value = null == characterEncoding ? contentType : contentType + "; charset=" + characterEncoding;
             headers.set(HttpHeaderNames.CONTENT_TYPE, value);
         }
-        CharSequence date = getFormattedDate();
-        headers.set(HttpHeaderNames.DATE, date); // 时间日期响应头
+        if (StringUtils.isEmpty( headers.get(HttpHeaderNames.DATE))) {
+            CharSequence date = getFormattedDate();
+            headers.set(HttpHeaderNames.DATE, date); // 时间日期响应头
+        }
+
         headers.set(HttpHeaderNames.SERVER, XhakaWebServerContext.getInstance().getServerInfo()); //服务器信息响应头
 
         //其他业务或框架设置的cookie，逐条写入到响应头去
