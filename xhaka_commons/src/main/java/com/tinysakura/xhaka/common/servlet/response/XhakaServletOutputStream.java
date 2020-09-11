@@ -4,7 +4,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultHttpContent;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpUtil;
+import io.netty.handler.stream.ChunkedStream;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
@@ -62,11 +64,20 @@ public class XhakaServletOutputStream extends ServletOutputStream {
         }
         boolean chunked = HttpUtil.isTransferEncodingChunked(xhakaHttpServletResponse.getOriginResponse());
         ChannelHandlerContext ctx = xhakaHttpServletResponse.getCtx();
-        if (chunked && ctx.channel().isActive()) {
-            if (!flushed) {
-                ctx.writeAndFlush(xhakaHttpServletResponse.getOriginResponse());
+        if (ctx.channel().isActive()) {
+            if (chunked && !flushed) {
+                ctx.writeAndFlush(xhakaHttpServletResponse);
+                this.flushed = true;
+                return;
             }
-            this.flushed = true;
+
+            if (!flushed) {
+                try {
+                    ctx.pipeline().get(HttpResponseEncoder.class).write(ctx, xhakaHttpServletResponse, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
