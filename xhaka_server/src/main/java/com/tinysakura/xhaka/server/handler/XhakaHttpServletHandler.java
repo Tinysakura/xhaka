@@ -59,6 +59,7 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
             return;
         }
 
+        fullHttpResponse.headers().set("transfer-encoding", "chunked");
         HttpServletResponse httpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, fullHttpResponse, ctx);
 
         httpServletResponse.getOutputStream().flush();
