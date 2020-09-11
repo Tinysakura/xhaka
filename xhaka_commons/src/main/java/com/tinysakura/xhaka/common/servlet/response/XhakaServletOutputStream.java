@@ -75,7 +75,7 @@ public class XhakaServletOutputStream extends ServletOutputStream {
 
             if (!flushed) {
                 try {
-                    ctx.pipeline().get(HttpServerCodec.class).write(ctx, xhakaHttpServletResponse, ctx.voidPromise());
+                    ctx.pipeline().get(HttpServerCodec.class).write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
