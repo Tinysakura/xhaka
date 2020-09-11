@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultHttpContent;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.stream.ChunkedStream;
 
@@ -73,7 +74,7 @@ public class XhakaServletOutputStream extends ServletOutputStream {
 
             if (!flushed) {
                 try {
-                    ctx.pipeline().get(HttpResponseEncoder.class).write(ctx, xhakaHttpServletResponse, null);
+                    ctx.pipeline().get(HttpServerCodec.class).write(ctx, xhakaHttpServletResponse, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
