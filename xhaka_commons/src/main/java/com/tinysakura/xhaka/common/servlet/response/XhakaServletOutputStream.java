@@ -78,6 +78,7 @@ public class XhakaServletOutputStream extends ServletOutputStream {
                     HttpServerCodec httpServerCodec = ctx.pipeline().get(HttpServerCodec.class);
                     if (httpServerCodec != null) {
                         httpServerCodec.write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
+                        httpServerCodec.flush(ctx);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
