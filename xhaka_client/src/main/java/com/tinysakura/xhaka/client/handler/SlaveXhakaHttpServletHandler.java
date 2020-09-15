@@ -26,7 +26,7 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
         // 目前只支持tomcat
         if (TomcatServletContext.getInstance().isCurrentWebServer()) {
             RequestDispatcher dispatch = TomcatServletContext.getInstance().getDispatch(xhakaHttpServletRequest.getRequestURI());
-            dispatch.include(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
+            dispatch.forward(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
 
             channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
         }
