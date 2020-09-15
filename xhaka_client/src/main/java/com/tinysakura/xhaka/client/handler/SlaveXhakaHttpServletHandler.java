@@ -7,6 +7,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.AsyncDispatcher;
 
+import javax.servlet.RequestDispatcher;
+
 /**
  * 让被代理方的servlet容器处理请求
  * @Author: chenfeihao@corp.netease.com
@@ -23,8 +25,8 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
         // 根据被代理服务的servlet容器类型处理请求
         // 目前只支持tomcat
         if (TomcatServletContext.getInstance().isCurrentWebServer()) {
-            AsyncDispatcher dispatch = TomcatServletContext.getInstance().getDispatch(xhakaHttpServletRequest.getRequestURI());
-            dispatch.dispatch(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
+            RequestDispatcher dispatch = TomcatServletContext.getInstance().getDispatch(xhakaHttpServletRequest.getRequestURI());
+            dispatch.include(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
 
             channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
         }

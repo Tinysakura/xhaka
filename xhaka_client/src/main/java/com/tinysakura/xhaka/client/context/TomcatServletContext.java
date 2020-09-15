@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.RequestDispatcher;
 import java.lang.reflect.Field;
 
 /**
@@ -83,8 +84,8 @@ public class TomcatServletContext implements ApplicationContextAware {
         return applicationContext;
     }
 
-    public AsyncDispatcher getDispatch(String requestURI) {
-        return (AsyncDispatcher) applicationContext.getRequestDispatcher(requestURI);
+    public RequestDispatcher getDispatch(String requestURI) {
+        return applicationContext.getRequestDispatcher(requestURI);
     }
 
     public static TomcatServletContext getInstance() {
