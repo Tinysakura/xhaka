@@ -306,6 +306,9 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
             String value = null == characterEncoding ? contentType : contentType + "; charset=" + characterEncoding;
             headers.set(HttpHeaderNames.CONTENT_TYPE, value);
         }
+        if (!HttpUtil.isContentLengthSet(originResponse)) {
+            HttpUtil.setContentLength(originResponse, this.originResponse.content().readableBytes());
+        }
         if (StringUtils.isEmpty( headers.get(HttpHeaderNames.DATE))) {
             CharSequence date = getFormattedDate();
             headers.set(HttpHeaderNames.DATE, date); // 时间日期响应头
