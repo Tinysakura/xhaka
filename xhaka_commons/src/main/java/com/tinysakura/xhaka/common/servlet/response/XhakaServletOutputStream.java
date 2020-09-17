@@ -4,11 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultHttpContent;
-import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpUtil;
-import io.netty.handler.stream.ChunkedStream;
-import io.netty.util.concurrent.Promise;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
@@ -67,24 +64,23 @@ public class XhakaServletOutputStream extends ServletOutputStream {
         boolean chunked = HttpUtil.isTransferEncodingChunked(xhakaHttpServletResponse.getOriginResponse());
         ChannelHandlerContext ctx = xhakaHttpServletResponse.getCtx();
         if (ctx.channel().isActive()) {
-            //if (chunked && !flushed) {
-            if (!flushed) {
+            if (chunked && !flushed) {
                 ctx.writeAndFlush(xhakaHttpServletResponse);
                 this.flushed = true;
                 return;
             }
 
-//            if (!flushed) {
-//                try {
-//                    HttpServerCodec httpServerCodec = ctx.pipeline().get(HttpServerCodec.class);
-//                    if (httpServerCodec != null) {
-//                        httpServerCodec.write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
-//                        httpServerCodec.flush(ctx);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            if (!flushed) {
+                try {
+                    HttpServerCodec httpServerCodec = ctx.pipeline().get(HttpServerCodec.class);
+                    if (httpServerCodec != null) {
+                        httpServerCodec.write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
+                        httpServerCodec.flush(ctx);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
