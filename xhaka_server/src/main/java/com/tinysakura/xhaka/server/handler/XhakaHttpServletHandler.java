@@ -3,26 +3,20 @@ package com.tinysakura.xhaka.server.handler;
 import com.tinysakura.xhaka.common.filter.XhakaFilterChainFactory;
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.constant.XhakaHttpHeaderConstant;
+import com.tinysakura.xhaka.common.gateway.context.client.GatewaySlaveChannelPool;
 import com.tinysakura.xhaka.common.gateway.exception.XhakaSlaveTimeoutException;
 import com.tinysakura.xhaka.common.gateway.future.XhakaFuture;
 import com.tinysakura.xhaka.common.gateway.remote.route.ServerDispatcher;
 import com.tinysakura.xhaka.common.gateway.remote.util.GlobalCounterUtil;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import com.tinysakura.xhaka.common.servlet.response.XhakaHttpServletResponse;
-import com.tinysakura.xhaka.common.gateway.context.client.GatewaySlaveChannelPool;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpVersion;
+import io.netty.handler.codec.http.*;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.Charset;
 
 /**
  * 处理XhakaHttpServletRequest(filterChain)
@@ -42,9 +36,9 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
         Channel slaveChannel = GatewaySlaveChannelPool.getInstance().getSlaveChannelByLoadBalanceStrategy(XhakaGateWayConfig.getInstance().getLoadBalance(), dispatcherServerName);
 
         if (slaveChannel == null) {
-            ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer();
-            byteBuf.writeBytes("404 not found".getBytes(Charset.forName("UTF-8")));
-            ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND, byteBuf));
+            DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
+            HttpUtil.setContentLength(response, 0);
+            ctx.writeAndFlush(response);
             return;
         }
 
@@ -61,7 +55,9 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
         try {
             fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
         } catch (XhakaSlaveTimeoutException e) {
-            ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.REQUEST_TIMEOUT));
+            DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.REQUEST_TIMEOUT);
+            HttpUtil.setContentLength(response, 0);
+            ctx.writeAndFlush(response);
             return;
         }
 
