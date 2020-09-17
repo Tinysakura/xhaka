@@ -122,8 +122,6 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
         for (LoadBalanceStrategy loadBalanceStrategy : loadBalanceStrategyBeanMap.values()) {
             loadBalanceStrategyMap.put(loadBalanceStrategy.getType(), loadBalanceStrategy);
         }
-
-        log.info("debug:{}", loadBalanceStrategyMap.size());
     }
 
     @Override
