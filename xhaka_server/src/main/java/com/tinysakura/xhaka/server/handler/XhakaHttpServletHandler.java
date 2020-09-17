@@ -40,6 +40,7 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
 
         if (slaveChannel == null) {
             ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND));
+            return;
         }
 
         Long xhakaRequestSequence = GlobalCounterUtil.getXhakaRequestSequence();
