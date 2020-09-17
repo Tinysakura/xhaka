@@ -38,4 +38,9 @@ public class FullHttpResponse2XhakaEncoder extends MessageToMessageEncoder<FullH
 
         ctx.channel().writeAndFlush(xhaka);
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("FullHttpResponse2XhakaEncoder occur error", cause);
+    }
 }
