@@ -300,12 +300,12 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
 
 
         HttpHeaders headers = originResponse.headers();
-        String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
-        if (StringUtils.isEmpty(contentType)) {
-            //Content Type 如果响应头为空，设置响应头的内容
-            String value = null == characterEncoding ? contentType : contentType + "; charset=" + characterEncoding;
-            headers.set(HttpHeaderNames.CONTENT_TYPE, value);
-        }
+//        String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
+//        if (StringUtils.isEmpty(contentType)) {
+//            //Content Type 如果响应头为空，设置响应头的内容
+//            String value = null == characterEncoding ? contentType : contentType + "; charset=" + characterEncoding;
+//            headers.set(HttpHeaderNames.CONTENT_TYPE, value);
+//        }
         if (!HttpUtil.isContentLengthSet(originResponse)) {
             HttpUtil.setContentLength(originResponse, this.originResponse.content().readableBytes());
         }
