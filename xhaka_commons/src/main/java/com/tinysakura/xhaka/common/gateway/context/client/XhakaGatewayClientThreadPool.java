@@ -55,7 +55,7 @@ public class XhakaGatewayClientThreadPool {
         ipSet.add(name);
     }
 
-    public static void removeIpSet(String value) {
+    static void removeIpSet(String value) {
         ipSet.remove(value);
     }
 

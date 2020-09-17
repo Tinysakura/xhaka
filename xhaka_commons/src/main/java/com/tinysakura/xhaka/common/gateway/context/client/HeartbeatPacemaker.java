@@ -67,6 +67,19 @@ public class HeartbeatPacemaker {
         atomicReference.set(null);
     }
 
+    public void removePacemaker(String serverName, String ip) {
+        while (atomicReference.compareAndSet(null, Thread.currentThread())) {
+            log.debug("spin in thread:{}", Thread.currentThread());
+        }
+
+        Map<String, AtomicInteger> map = slaveChannelCounter.get(serverName);
+        if (map != null) {
+            map.remove(ip);
+        }
+
+        atomicReference.set(null);
+    }
+
     private void start() {
         exec.scheduleAtFixedRate(new Task(), 0, PACEMAKER_PERIOD, TimeUnit.SECONDS);
     }

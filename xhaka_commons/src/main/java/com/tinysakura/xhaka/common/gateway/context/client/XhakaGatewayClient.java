@@ -14,6 +14,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -67,6 +69,11 @@ public class XhakaGatewayClient {
             GatewaySlaveChannelPool.getInstance().addSlaveChannelIntoPool(serverName, remoteHost, remotePort, f.channel());
             HeartbeatPacemaker.getInstance().pacemaker(serverName, remoteHost + ":" + remotePort, null);
             log.info("XhakaGatewayClient connect success, remoteHost:{}, remotePort:{}", remoteHost, remotePort);
+
+            f.channel().closeFuture().addListener(future -> {
+                log.debug("连接关闭:{}", remoteHost + ":" + remotePort);
+                GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, remoteHost + ":" + remotePort);
+            });
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("XhakaGatewayClient remoteHost:{}, remotePort:{} occur error", remoteHost, remotePort, e);

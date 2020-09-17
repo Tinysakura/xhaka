@@ -1,6 +1,7 @@
 package com.tinysakura.xhaka.server.bootstrap;
 
 import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
+import com.tinysakura.xhaka.common.gateway.context.client.HeartbeatPacemaker;
 import com.tinysakura.xhaka.common.gateway.discovery.constant.XhakaDiscoveryConstant;
 import com.tinysakura.xhaka.common.gateway.discovery.util.ZookeeperUtils;
 import com.tinysakura.xhaka.common.gateway.context.client.GatewaySlaveChannelPool;
@@ -110,6 +111,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
         if (!added && removed) {
             String serverName = childPath.substring(0, i);
             GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, split[0], Integer.valueOf(split[1]));
+            HeartbeatPacemaker.getInstance().removePacemaker(serverName, ip);
         }
     }
 
