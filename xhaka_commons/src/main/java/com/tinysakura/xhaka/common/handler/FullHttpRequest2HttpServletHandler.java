@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka.common.handler;
 
+import com.tinysakura.xhaka.common.gateway.constant.XhakaHttpHeaderConstant;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import com.tinysakura.xhaka.common.servlet.response.XhakaHttpServletResponse;
 import io.netty.channel.ChannelHandlerContext;
@@ -29,7 +30,10 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
 //        System.out.println(new String(a, Charset.forName("UTF-8")));
 
         XhakaHttpServletResponse xhakaHttpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, ctx);
+        // 设置xhakaid
+        xhakaHttpServletResponse.addHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, fullHttpRequest.headers().get(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID));
         xhakaHttpServletRequest.setHttpServletResponse(xhakaHttpServletResponse);
+
 
         if (HttpUtil.is100ContinueExpected(fullHttpRequest)) {
             ctx.write(DEFAULT_CONTINUE_FULLHTTP_RESPONSE, ctx.voidPromise());

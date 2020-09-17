@@ -329,9 +329,6 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
             }
             headers.add(HttpHeaderNames.SET_COOKIE, sb.toString());
         }
-
-        // 设置xhakaid
-        headers.add(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, requestFacade.getHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID));
     }
 
     /**
