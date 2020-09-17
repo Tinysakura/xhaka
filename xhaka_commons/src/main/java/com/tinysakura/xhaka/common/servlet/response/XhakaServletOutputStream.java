@@ -67,23 +67,24 @@ public class XhakaServletOutputStream extends ServletOutputStream {
         boolean chunked = HttpUtil.isTransferEncodingChunked(xhakaHttpServletResponse.getOriginResponse());
         ChannelHandlerContext ctx = xhakaHttpServletResponse.getCtx();
         if (ctx.channel().isActive()) {
-            if (chunked && !flushed) {
+            //if (chunked && !flushed) {
+            if (!flushed) {
                 ctx.writeAndFlush(xhakaHttpServletResponse);
                 this.flushed = true;
                 return;
             }
 
-            if (!flushed) {
-                try {
-                    HttpServerCodec httpServerCodec = ctx.pipeline().get(HttpServerCodec.class);
-                    if (httpServerCodec != null) {
-                        httpServerCodec.write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
-                        httpServerCodec.flush(ctx);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (!flushed) {
+//                try {
+//                    HttpServerCodec httpServerCodec = ctx.pipeline().get(HttpServerCodec.class);
+//                    if (httpServerCodec != null) {
+//                        httpServerCodec.write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
+//                        httpServerCodec.flush(ctx);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
     }
 
