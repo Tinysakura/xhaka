@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
 
@@ -30,8 +31,10 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
 //        System.out.println(new String(a, Charset.forName("UTF-8")));
 
         XhakaHttpServletResponse xhakaHttpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, ctx);
-        // 设置xhakaid
-        xhakaHttpServletResponse.addHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, fullHttpRequest.headers().get(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID));
+        // 设置xhakaid（slave端逻辑，salve和gateway复用了同一个ChannelHandler）
+        if (StringUtils.isNotEmpty(xhakaHttpServletRequest.getHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID))) {
+            xhakaHttpServletResponse.addHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, fullHttpRequest.headers().get(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID));
+        }
         xhakaHttpServletRequest.setHttpServletResponse(xhakaHttpServletResponse);
 
 
