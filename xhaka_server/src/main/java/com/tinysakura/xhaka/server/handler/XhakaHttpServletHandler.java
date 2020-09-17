@@ -9,7 +9,7 @@ import com.tinysakura.xhaka.common.gateway.remote.route.ServerDispatcher;
 import com.tinysakura.xhaka.common.gateway.remote.util.GlobalCounterUtil;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import com.tinysakura.xhaka.common.servlet.response.XhakaHttpServletResponse;
-import com.tinysakura.xhaka.server.context.GatewaySlaveChannelPool;
+import com.tinysakura.xhaka.common.gateway.context.client.GatewaySlaveChannelPool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

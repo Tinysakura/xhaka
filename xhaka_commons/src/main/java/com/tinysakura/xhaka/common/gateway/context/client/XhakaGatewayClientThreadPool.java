@@ -1,7 +1,6 @@
-package com.tinysakura.xhaka.server.context;
+package com.tinysakura.xhaka.common.gateway.context.client;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
-import com.tinysakura.xhaka.server.bootstrap.XhakaGatewayClient;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;

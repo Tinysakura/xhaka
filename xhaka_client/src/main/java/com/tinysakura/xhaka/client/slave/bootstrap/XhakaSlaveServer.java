@@ -1,8 +1,8 @@
 package com.tinysakura.xhaka.client.slave.bootstrap;
 
+import com.tinysakura.xhaka.client.handler.SlaveXhakaHttpServletHandler;
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.discovery.XhakaDiscovery;
-import com.tinysakura.xhaka.client.handler.SlaveXhakaHttpServletHandler;
 import com.tinysakura.xhaka.common.gateway.handler.XhakaProtocolHandler;
 import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpResponse2XhakaEncoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.Xhaka2FulHttpRequestDecoder;
@@ -17,6 +17,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.server.WebServerException;
@@ -59,11 +61,11 @@ public class XhakaSlaveServer implements WebServer {
                 .group(bossGroup, workerGroup)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    protected void initChannel(SocketChannel socketChannel) {
                         socketChannel.pipeline()
                                 .addLast(new XhakaDecoder(XhakaGateWayConfig.getInstance().getXhakaMsgMaxLength(), 0, 4))
                                 //处理xhaka协议
-                                .addLast(new XhakaProtocolHandler(true))
+                                .addLast(new XhakaProtocolHandler(true, serverName))
                                 //处理xhaka协议转换的http request
                                 .addLast(new Xhaka2FulHttpRequestDecoder())
                                 //将FullHttpRequest转换为适配Servlet容器的xhakaHttpServletRequest

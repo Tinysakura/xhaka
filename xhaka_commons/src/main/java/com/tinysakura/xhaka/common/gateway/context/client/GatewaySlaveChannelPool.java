@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.server.context;
+package com.tinysakura.xhaka.common.gateway.context.client;
 
 import com.tinysakura.xhaka.common.gateway.remote.nlb.LoadBalanceStrategy;
 import com.tinysakura.xhaka.common.gateway.remote.nlb.constant.LoadBalanceStrategyConstant;
@@ -66,6 +66,10 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
     }
 
     public void removeSlaveChannelFromPool(String serverName, String remoteHost, Integer remotePort) {
+        removeSlaveChannelFromPool(serverName, remoteHost + ":" + remotePort);
+    }
+
+    void removeSlaveChannelFromPool(String serverName, String channelTag) {
         reentrantReadWriteLock.writeLock().lock();
 
         try {
@@ -75,7 +79,6 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
                 return;
             }
 
-            String channelTag = remoteHost + ":" + remotePort;
             channelMap.remove(channelTag);
             XhakaGatewayClientThreadPool.removeIpSet("XhakaGatewayClient_" + serverName);
         } catch (Exception e) {
@@ -83,7 +86,6 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
         } finally {
             reentrantReadWriteLock.writeLock().unlock();
         }
-
     }
 
     public Channel getSlaveChannelByLoadBalanceStrategy(String strategyName, String serverName) {

@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.server.bootstrap;
+package com.tinysakura.xhaka.common.gateway.context.client;
 
 import com.tinysakura.xhaka.common.gateway.config.XhakaGateWayConfig;
 import com.tinysakura.xhaka.common.gateway.handler.SlaveXhakaHttpServletResponsehHandler;
@@ -7,7 +7,6 @@ import com.tinysakura.xhaka.common.gateway.handler.codec.FullHttpRequest2XhakaEn
 import com.tinysakura.xhaka.common.gateway.handler.codec.Xhaka2FullHttpResponseDecoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaDecoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaEncoder;
-import com.tinysakura.xhaka.server.context.GatewaySlaveChannelPool;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -66,6 +65,7 @@ public class XhakaGatewayClient {
         ChannelFuture f = bootstrap.connect(new InetSocketAddress(remoteHost, remotePort));
         try {
             GatewaySlaveChannelPool.getInstance().addSlaveChannelIntoPool(serverName, remoteHost, remotePort, f.channel());
+            HeartbeatPacemaker.getInstance().pacemaker(serverName, remoteHost + ":" + remotePort, null);
             log.info("XhakaGatewayClient connect success, remoteHost:{}, remotePort:{}", remoteHost, remotePort);
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {

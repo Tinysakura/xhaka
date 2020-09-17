@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka.common.gateway.handler;
 
+import com.tinysakura.xhaka.common.gateway.context.client.HeartbeatPacemaker;
 import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaEncoder;
 import com.tinysakura.xhaka.common.protocal.Xhaka;
 import com.tinysakura.xhaka.common.protocal.constant.XhakaHeaderConstant;
@@ -7,6 +8,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,12 +26,19 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
 
     private boolean sendHeartPackPeriod;
 
+    private String serverName;
+
     public XhakaProtocolHandler() {
         this.sendHeartPackPeriod = false;
     }
 
     public XhakaProtocolHandler(Boolean sendHeartPackPeriod) {
         this.sendHeartPackPeriod = sendHeartPackPeriod;
+    }
+
+    public XhakaProtocolHandler(Boolean sendHeartPackPeriod, String serverName) {
+        this.sendHeartPackPeriod = sendHeartPackPeriod;
+        this.serverName = serverName;
     }
 
     @Override
@@ -43,6 +53,12 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
 
         // 心跳请求发送心跳响应
         if (XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART == xhaka.getPackType() && XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST == xhaka.getEventType()) {
+            // 收到心跳请求，在心跳起搏器中增加当前连接活跃度
+            String serverName = new String(xhaka.getBody(), Charset.forName("UTF-8"));
+            InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+
+            HeartbeatPacemaker.getInstance().pacemaker(serverName, socketAddress.getAddress().getHostAddress() + ":" + socketAddress.getPort(), ctx.channel());
+
             Xhaka xhakaHeartRes = new Xhaka();
             xhakaHeartRes.setPackType(XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART);
             xhakaHeartRes.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_RESPONSE);
@@ -70,6 +86,8 @@ public class XhakaProtocolHandler extends SimpleChannelInboundHandler<Xhaka> {
             Xhaka xhakaHeartReq = new Xhaka();
             xhakaHeartReq.setPackType(XhakaHeaderConstant.XHAKA_PACK_TYPE_HEART);
             xhakaHeartReq.setEventType(XhakaHeaderConstant.XHAKA_EVENT_TYPE_REQUEST);
+            xhakaHeartReq.setBody(serverName.getBytes(Charset.forName("UTF-8")));
+            xhakaHeartReq.setBodyLength(xhakaHeartReq.getBody().length);
 
             scheduleExecutor.scheduleAtFixedRate(() -> {
                 log.info("slave begin send heart pack,period:{}", HEART_PACK_SEND_PERIOD);
