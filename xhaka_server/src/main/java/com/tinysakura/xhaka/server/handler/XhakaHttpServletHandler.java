@@ -10,6 +10,8 @@ import com.tinysakura.xhaka.common.gateway.remote.util.GlobalCounterUtil;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import com.tinysakura.xhaka.common.servlet.response.XhakaHttpServletResponse;
 import com.tinysakura.xhaka.common.gateway.context.client.GatewaySlaveChannelPool;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -20,6 +22,7 @@ import io.netty.handler.codec.http.HttpVersion;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.Charset;
 
 /**
  * 处理XhakaHttpServletRequest(filterChain)
@@ -39,7 +42,9 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
         Channel slaveChannel = GatewaySlaveChannelPool.getInstance().getSlaveChannelByLoadBalanceStrategy(XhakaGateWayConfig.getInstance().getLoadBalance(), dispatcherServerName);
 
         if (slaveChannel == null) {
-            ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND));
+            ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer();
+            byteBuf.writeBytes("404 not found".getBytes(Charset.forName("UTF-8")));
+            ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND, byteBuf));
             return;
         }
 
