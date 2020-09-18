@@ -64,7 +64,7 @@ public class XhakaGatewayClient {
 
         ChannelFuture f = bootstrap.connect(new InetSocketAddress(remoteHost, remotePort));
         try {
-            if (f.isSuccess()) {
+            if (f.cause() == null) {
                 GatewaySlaveChannelPool.getInstance().addSlaveChannelIntoPool(serverName, remoteHost, remotePort, f.channel());
                 HeartbeatPacemaker.getInstance().pacemaker(serverName, remoteHost + ":" + remotePort, null);
                 log.info("XhakaGatewayClient connect success, remoteHost:{}, remotePort:{}", remoteHost, remotePort);
