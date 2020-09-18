@@ -99,6 +99,7 @@ public class HeartbeatPacemaker {
 
                     for (Map.Entry<String, AtomicInteger> childEntry : entry.getValue().entrySet()) {
                         int i = childEntry.getValue().decrementAndGet();
+                        log.debug("server:{} channel:{} heart count now:{}", serverName, childEntry.getKey(), i);
                         if (i < 0) {
                             // 如果对应channel的心跳计数低于0则将其从服务可选择的channelPool中移除
                             GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, childEntry.getKey());
