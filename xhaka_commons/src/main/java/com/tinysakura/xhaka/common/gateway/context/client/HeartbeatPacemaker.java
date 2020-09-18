@@ -60,6 +60,7 @@ public class HeartbeatPacemaker {
         if (!slaveChannelCounter.get(serverName).containsKey(ip) && channel != null) {
             String[] split = ip.split(":");
             GatewaySlaveChannelPool.getInstance().addSlaveChannelIntoPool(serverName, split[0], Integer.valueOf(split[1]), channel);
+            log.debug("re add server:{} channel:{} by pacemaker", serverName, ip);
         }
         slaveChannelCounter.get(serverName).putIfAbsent(ip, new AtomicInteger(1));
         slaveChannelCounter.get(serverName).get(ip).incrementAndGet();
