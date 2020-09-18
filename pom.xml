@@ -23,6 +23,8 @@
 
     <properties>
         <java.version>8</java.version>
+        <grpc.version>1.6.1</grpc.version>
+        <protobuf.version>3.3.0</protobuf.version>
     </properties>
 
     <dependencies>
@@ -82,8 +84,6 @@
             <artifactId>curator-recipes</artifactId>
             <version>2.12.0</version>
         </dependency>
-
-
     </dependencies>
 
     <build>

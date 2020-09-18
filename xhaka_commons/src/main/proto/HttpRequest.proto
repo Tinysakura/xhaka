@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package com.tinysakura.xhaka.common.gateway.serialize.protobuf;
+import "Header.proto";
+
+message HttpRequest {
+   string uri = 1;
+   string method = 2;
+   repeated Header headers = 3;
+   bytes body = 4;
+}

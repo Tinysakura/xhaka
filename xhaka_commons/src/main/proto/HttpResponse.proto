@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.tinysakura.xhaka.common.gateway.serialize.protobuf;
+import "Header.proto";
+
+message HttpResponse {
+   int32 status = 1;
+   repeated Header headers = 2;
+   bytes body = 3;
+}

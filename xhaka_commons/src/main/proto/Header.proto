@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package com.tinysakura.xhaka.common.gateway.serialize.protobuf;
+
+message Header {
+  string name = 1;
+  string value = 2;
+}
