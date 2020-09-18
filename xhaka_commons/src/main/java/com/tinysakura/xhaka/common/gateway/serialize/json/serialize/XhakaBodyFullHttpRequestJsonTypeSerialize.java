@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.common.gateway.serialize.impl;
+package com.tinysakura.xhaka.common.gateway.serialize.json.serialize;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
