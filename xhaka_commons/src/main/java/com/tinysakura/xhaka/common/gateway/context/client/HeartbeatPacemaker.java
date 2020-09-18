@@ -21,7 +21,7 @@ public class HeartbeatPacemaker {
 
     private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
 
-    public static final Integer PACEMAKER_PERIOD = 60 * 2;
+    public static final Integer PACEMAKER_PERIOD = 60;
 
     private Map<String, Map<String, AtomicInteger>> slaveChannelCounter;
 
