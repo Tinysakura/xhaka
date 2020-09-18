@@ -66,6 +66,7 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
     }
 
     public void removeSlaveChannelFromPool(String serverName, String remoteHost, Integer remotePort) {
+        log.debug("removeSlaveChannelFromPool serverName:{}, ip:{}", serverName, remoteHost + remotePort);
         removeSlaveChannelFromPool(serverName, remoteHost + ":" + remotePort);
     }
 
