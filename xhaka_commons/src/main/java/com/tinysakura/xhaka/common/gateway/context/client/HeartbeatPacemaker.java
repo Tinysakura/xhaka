@@ -108,7 +108,7 @@ public class HeartbeatPacemaker {
                             // 如果对应channel的心跳计数低于0则将其从服务可选择的channelPool中移除
                             GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, childEntry.getKey());
                             log.debug("remove server:{} instance:{}", serverName, childEntry.getKey());
-                            removeEntryKeyList.add(entry.getKey());
+                            removeEntryKeyList.add(childEntry.getKey());
                         }
                     }
 
