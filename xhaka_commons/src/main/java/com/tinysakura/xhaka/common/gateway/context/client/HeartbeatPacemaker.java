@@ -4,7 +4,9 @@ import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -97,6 +99,8 @@ public class HeartbeatPacemaker {
                 for (Map.Entry<String, Map<String, AtomicInteger>> entry : slaveChannelCounter.entrySet()) {
                     String serverName = entry.getKey();
 
+                    List<String> removeEntryKeyList = new ArrayList<>();
+
                     for (Map.Entry<String, AtomicInteger> childEntry : entry.getValue().entrySet()) {
                         int i = childEntry.getValue().decrementAndGet();
                         log.debug("server:{} channel:{} heart count now:{}", serverName, childEntry.getKey(), i);
@@ -104,7 +108,13 @@ public class HeartbeatPacemaker {
                             // 如果对应channel的心跳计数低于0则将其从服务可选择的channelPool中移除
                             GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, childEntry.getKey());
                             log.debug("remove server:{} instance:{}", serverName, childEntry.getKey());
+                            removeEntryKeyList.add(entry.getKey());
                         }
+                    }
+
+                    for (String removeEntryKey : removeEntryKeyList) {
+                        // 心跳计数低于0的从slaveChannelCounter剔除
+                        slaveChannelCounter.get(serverName).remove(removeEntryKey);
                     }
                 }
             }
