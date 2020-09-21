@@ -63,7 +63,7 @@ public class XhakaBodyFullHttpResponseProtobufTypeSerialize implements XhakaBody
 
             DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_0, HttpResponseStatus.valueOf(httpResponse.getStatus()), byteBuf);
 
-            if (CollectionUtils.isEmpty(httpResponse.getHeadersList())) {
+            if (!CollectionUtils.isEmpty(httpResponse.getHeadersList())) {
                 for (HeaderOuterClass.Header header : httpResponse.getHeadersList()) {
                     fullHttpResponse.headers().add(header.getName(), header.getValue());
                 }

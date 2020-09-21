@@ -62,7 +62,7 @@ public class XhakaBodyFullHttpRequestProtobufTypeSerialize implements XhakaBodyS
 
             DefaultFullHttpRequest fullHttpRequest = new DefaultFullHttpRequest(HttpVersion.HTTP_1_0, HttpMethod.valueOf(httpRequest.getMethod()), httpRequest.getUri(), byteBuf);
 
-            if (CollectionUtils.isEmpty(httpRequest.getHeadersList())) {
+            if (!CollectionUtils.isEmpty(httpRequest.getHeadersList())) {
                 for (HeaderOuterClass.Header header : httpRequest.getHeadersList()) {
                     fullHttpRequest.headers().add(header.getName(), header.getValue());
                 }
