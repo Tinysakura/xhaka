@@ -3,6 +3,7 @@ package com.tinysakura.xhaka.client.filter;
 import com.tinysakura.xhaka.client.context.TomcatServletContext;
 import com.tinysakura.xhaka.client.util.ServletFilterUtils;
 import com.tinysakura.xhaka.common.filter.FilterChainImpl;
+import io.netty.channel.ChannelHandlerContext;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
 import org.springframework.stereotype.Component;
@@ -23,8 +24,8 @@ public class SlaveFilterChainFactory {
      * @param httpServletRequest
      * @return
      */
-    public static FilterChain createFilterChain(HttpServletRequest httpServletRequest) {
-        FilterChainImpl filterChain = new FilterChainImpl();
+    public static FilterChain createFilterChain(HttpServletRequest httpServletRequest, ChannelHandlerContext ctx) {
+        FilterChainImpl filterChain = new FilterChainImpl(ctx);
 
 
         if (TomcatServletContext.getInstance().isCurrentWebServer()) {

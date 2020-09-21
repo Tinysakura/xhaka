@@ -1,6 +1,7 @@
 package com.tinysakura.xhaka.common.filter;
 
 import com.tinysakura.xhaka.common.util.ServletFilterUtils;
+import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -16,8 +17,8 @@ import java.util.List;
  */
 @Component
 public class XhakaFilterChainFactory {
-    public static FilterChain createFilterChain(HttpServletRequest httpServletRequest) {
-        FilterChainImpl filterChain = new FilterChainImpl();
+    public static FilterChain createFilterChain(HttpServletRequest httpServletRequest, ChannelHandlerContext ctx) {
+        FilterChainImpl filterChain = new FilterChainImpl(ctx);
 
         List<FilterRegistrationBeanWrap> servletFilterRegistList = XhakaWebServerFilterContext.getServletFilterRegistList();
 

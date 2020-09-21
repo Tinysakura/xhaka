@@ -28,41 +28,41 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, XhakaHttpServletRequest xhakaHttpServletRequest) throws Exception {
-        FilterChain filterChain = XhakaFilterChainFactory.createFilterChain(xhakaHttpServletRequest);
+        FilterChain filterChain = XhakaFilterChainFactory.createFilterChain(xhakaHttpServletRequest, ctx);
         filterChain.doFilter(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
 
-        // todo 网关转发部分逻辑
-        String dispatcherServerName = ServerDispatcher.getDispatcherServerName(xhakaHttpServletRequest);
-        Channel slaveChannel = GatewaySlaveChannelPool.getInstance().getSlaveChannelByLoadBalanceStrategy(XhakaGateWayConfig.getInstance().getLoadBalance(), dispatcherServerName);
-
-        if (slaveChannel == null) {
-            DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
-            HttpUtil.setContentLength(response, 0);
-            ctx.writeAndFlush(response);
-            return;
-        }
-
-        Long xhakaRequestSequence = GlobalCounterUtil.getXhakaRequestSequence();
-        xhakaHttpServletRequest.addHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, xhakaRequestSequence);
-        slaveChannel.writeAndFlush(xhakaHttpServletRequest.getOriginalRequest().copy());
-
-        XhakaFuture future = new XhakaFuture(xhakaRequestSequence);
-        /*
-         * thread block util gateway slave return response
-         * this channel run in standard business thread group, not affect io thread group
-         */
-        FullHttpResponse fullHttpResponse = null;
-        try {
-            fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
-        } catch (XhakaSlaveTimeoutException e) {
-            DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.REQUEST_TIMEOUT);
-            HttpUtil.setContentLength(response, 0);
-            ctx.writeAndFlush(response);
-            return;
-        }
+//        // 网关转发部分逻辑
+//        String dispatcherServerName = ServerDispatcher.getDispatcherServerName(xhakaHttpServletRequest);
+//        Channel slaveChannel = GatewaySlaveChannelPool.getInstance().getSlaveChannelByLoadBalanceStrategy(XhakaGateWayConfig.getInstance().getLoadBalance(), dispatcherServerName);
+//
+//        if (slaveChannel == null) {
+//            DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
+//            HttpUtil.setContentLength(response, 0);
+//            ctx.writeAndFlush(response);
+//            return;
+//        }
+//
+//        Long xhakaRequestSequence = GlobalCounterUtil.getXhakaRequestSequence();
+//        xhakaHttpServletRequest.addHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, xhakaRequestSequence);
+//        slaveChannel.writeAndFlush(xhakaHttpServletRequest.getOriginalRequest().copy());
+//
+//        XhakaFuture future = new XhakaFuture(xhakaRequestSequence);
+//        /*
+//         * thread block util gateway slave return response
+//         * this channel run in standard business thread group, not affect io thread group
+//         */
+//        FullHttpResponse fullHttpResponse = null;
+//        try {
+//            fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
+//        } catch (XhakaSlaveTimeoutException e) {
+//            DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.REQUEST_TIMEOUT);
+//            HttpUtil.setContentLength(response, 0);
+//            ctx.writeAndFlush(response);
+//            return;
+//        }
 
         //fullHttpResponse.headers().set("transfer-encoding", "chunked");
-        HttpServletResponse httpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, fullHttpResponse, ctx);
+        HttpServletResponse httpServletResponse = xhakaHttpServletRequest.getHttpServletResponse();
 
         httpServletResponse.getOutputStream().flush();
     }
