@@ -16,6 +16,8 @@ public class FilterChainImpl implements FilterChain {
 
     private Servlet servlet;
 
+    private volatile boolean servletInvoked = false;
+
 //    private static ThreadLocal<ServletRequest> LastHttpServletRequest;
 //
 //    private static ThreadLocal<ServletResponse> LastHttpServletResponse;
@@ -38,7 +40,10 @@ public class FilterChainImpl implements FilterChain {
             filter.doFilter(request, response, this);
         }
 
-        servlet.service(request, response);
+        if (!servletInvoked) {
+            servlet.service(request, response);
+            servletInvoked = true;
+        }
     }
 
     public void addFilter(Filter filter) {
