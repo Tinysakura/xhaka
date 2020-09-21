@@ -27,7 +27,7 @@ public class TestFilter implements Filter {
         //response.getOutputStream().flush();
         ((HttpServletResponse) response).addHeader("yys", "tql");
         Cookie cookie = new Cookie("memberId", "12345");
-        cookie.setDomain("localhost:8989");
+        cookie.setDomain(".tinysakura.com");
         cookie.setMaxAge(60 * 60 * 24);
         ((HttpServletResponse) response).addCookie(cookie);
         chain.doFilter(request, response);
