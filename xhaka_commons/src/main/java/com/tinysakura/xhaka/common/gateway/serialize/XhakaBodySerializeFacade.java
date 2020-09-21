@@ -22,7 +22,7 @@ public class XhakaBodySerializeFacade {
     static {
         xhakaRequestSerializerMap = new HashMap<>();
         xhakaRequestSerializerMap.put(XhakaHeaderConstant.XHAKA_SERIALIZATION_JSON, new XhakaBodyFullHttpRequestJsonTypeSerialize());
-        xhakaResponseSerializerMap.put(XhakaHeaderConstant.XHAKA_SERIALIZATION_PROTOBUF, new XhakaBodyFullHttpRequestProtobufTypeSerialize());
+        xhakaRequestSerializerMap.put(XhakaHeaderConstant.XHAKA_SERIALIZATION_PROTOBUF, new XhakaBodyFullHttpRequestProtobufTypeSerialize());
 
         xhakaResponseSerializerMap = new HashMap<>();
         xhakaResponseSerializerMap.put(XhakaHeaderConstant.XHAKA_SERIALIZATION_JSON, new XhakaBodyFullHttpResponseJsonTypeSerialize());
