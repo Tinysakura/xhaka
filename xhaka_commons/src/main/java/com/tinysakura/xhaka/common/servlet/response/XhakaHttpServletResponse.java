@@ -1,7 +1,6 @@
 package com.tinysakura.xhaka.common.servlet.response;
 
 import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
-import com.tinysakura.xhaka.common.gateway.constant.XhakaHttpHeaderConstant;
 import com.tinysakura.xhaka.common.servlet.request.XhakaHttpServletRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -78,6 +77,22 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
         this.originResponse = fullHttpResponse;
         this.printWriter = new PrintWriter(xhakaServletOutputSteam);
         this.cookies = new ArrayList<>();
+    }
+
+    public void replaceOriginResponse(FullHttpResponse newResponse) {
+        this.originResponse.release();
+        FullHttpResponse oldResponse = this.originResponse;
+
+        this.originResponse = newResponse;
+        this.xhakaServletOutputSteam = new XhakaServletOutputStream(this, newResponse.content());
+        this.printWriter = new PrintWriter(xhakaServletOutputSteam);
+
+        // add old header if not exist
+        for (String headerName : oldResponse.headers().names()) {
+            if (getHeader(headerName) == null) {
+                addHeader(headerName, oldResponse.headers().get(headerName));
+            }
+        }
     }
 
     @Override
@@ -317,6 +332,7 @@ public class XhakaHttpServletResponse implements HttpServletResponse {
         headers.set(HttpHeaderNames.SERVER, XhakaWebServerContext.getInstance().getServerInfo()); //服务器信息响应头
 
         //其他业务或框架设置的cookie，逐条写入到响应头去
+
         for (Cookie cookie : cookies) {
             StringBuilder sb = new StringBuilder();
             sb.append(cookie.getName()).append("=").append(cookie.getValue())

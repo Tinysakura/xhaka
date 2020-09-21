@@ -78,7 +78,9 @@ public class XhakaServlet implements Servlet {
             return;
         }
 
-        xhakaHttpServletRequest.setHttpServletResponse(new XhakaHttpServletResponse(xhakaHttpServletRequest, fullHttpResponse, ctx));
+        // 用经由代理服务处理得到的response代替原来的response
+        assert res instanceof XhakaHttpServletResponse;
+        ((XhakaHttpServletResponse) res).replaceOriginResponse(fullHttpResponse);
     }
 
     @Override

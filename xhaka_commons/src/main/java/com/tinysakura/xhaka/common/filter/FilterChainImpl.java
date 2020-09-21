@@ -18,15 +18,6 @@ public class FilterChainImpl implements FilterChain {
 
     private volatile boolean servletInvoked = false;
 
-//    private static ThreadLocal<ServletRequest> LastHttpServletRequest;
-//
-//    private static ThreadLocal<ServletResponse> LastHttpServletResponse;
-//
-//    static {
-//        LastHttpServletRequest = new ThreadLocal<>();
-//        LastHttpServletResponse = new ThreadLocal<>();
-//    }
-
     public FilterChainImpl(ChannelHandlerContext ctx) {
         this.filterLinkedList = new LinkedList<>();
         this.servlet = new XhakaServlet(ctx);
@@ -49,12 +40,4 @@ public class FilterChainImpl implements FilterChain {
     public void addFilter(Filter filter) {
         this.filterLinkedList.addLast(filter);
     }
-
-//    public void setLastServletRequest(ServletRequest servletRequest) {
-//
-//    }
-//
-//    public void setLastServletResponse() {
-//
-//    }
 }
