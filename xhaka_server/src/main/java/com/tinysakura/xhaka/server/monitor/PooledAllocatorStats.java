@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka.server.monitor;
 
+import com.alibaba.fastjson.JSON;
 import io.netty.buffer.*;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 
 public class PooledAllocatorStats {
-    public Map<String, Object> getMetrics() {
+    public String getMetrics() {
         final PooledByteBufAllocator allocator = PooledByteBufAllocator.DEFAULT;
         final Map<String, Object> metrics = new HashMap<>();
         {
@@ -29,7 +30,7 @@ public class PooledAllocatorStats {
             }
         }
 
-        return metrics;
+        return JSON.toJSONString(metrics);
     }
 
     private static Map<String, Object> metricsOfPoolArena(
