@@ -34,6 +34,7 @@ public class FullHttpRequest2XhakaEncoder extends MessageToMessageEncoder<FullHt
 
         byte[] body = XhakaBodySerializeFacade.findRequestSerializer(xhaka.getSerialization()).serialize(fullHttpRequest);
         fullHttpRequest.content().resetReaderIndex();
+        fullHttpRequest.release();
         xhaka.setBodyLength(fullHttpRequest.content().readableBytes());
         xhaka.setBody(body);
 
