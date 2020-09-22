@@ -35,6 +35,8 @@ public class XhakaDecoder extends LengthFieldBasedFrameDecoder {
             frame.readBytes(bytes);
 
             Xhaka xhaka = new Xhaka(ArrayUtils.subarray(bytes, 0, 13));
+            frame.release();
+
             xhaka.setBody(ArrayUtils.subarray(bytes, 13, bytes.length));
 
             return xhaka;
