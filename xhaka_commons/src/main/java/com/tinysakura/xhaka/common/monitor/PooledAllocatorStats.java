@@ -1,4 +1,4 @@
-package com.tinysakura.xhaka.server.monitor;
+package com.tinysakura.xhaka.common.monitor;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.buffer.*;

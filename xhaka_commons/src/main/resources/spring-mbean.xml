@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="pooledstats" class="com.tinysakura.xhaka.server.monitor.PooledAllocatorStats"/>
+    <bean id="pooledstats" class="com.tinysakura.xhaka.common.monitor.PooledAllocatorStats"/>
 
     <bean class="org.springframework.jmx.export.MBeanExporter"
           lazy-init="false">
