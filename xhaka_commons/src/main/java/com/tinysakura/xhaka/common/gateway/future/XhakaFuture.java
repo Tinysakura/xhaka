@@ -38,6 +38,9 @@ public class XhakaFuture {
 
                 while (!isReceivedResponse()) {
                     done.await(timeout, TimeUnit.SECONDS);
+
+                    String xhakaId = response.headers().get("xhaka-id");
+                    log.info("await end, xhaka-id:{} repsonse, now:{}", xhakaId, System.currentTimeMillis());
                     if (isReceivedResponse() || System.currentTimeMillis() - start > timeout) {
                         break;
                     }
@@ -75,6 +78,8 @@ public class XhakaFuture {
             this.response = response;
             // 唤醒调用get的业务线程
             done.signal();
+            String xhakaId = response.headers().get("xhaka-id");
+            log.info("signal, xhaka-id:{} repsonse, now:{}", xhakaId, System.currentTimeMillis());
         } catch (Exception e) {
             log.error("doReceived response occur error", e);
         } finally {
