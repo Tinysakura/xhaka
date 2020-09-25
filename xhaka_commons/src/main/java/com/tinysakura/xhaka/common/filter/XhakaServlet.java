@@ -12,6 +12,7 @@ import com.tinysakura.xhaka.common.servlet.response.XhakaHttpServletResponse;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.io.IOException;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/9/21
  */
-
+@Slf4j
 public class XhakaServlet implements Servlet {
 
     private ChannelHandlerContext ctx;
@@ -66,6 +67,8 @@ public class XhakaServlet implements Servlet {
         FullHttpResponse fullHttpResponse = null;
         try {
             fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
+            String xhakaId = fullHttpResponse.headers().get("xhaka-id");
+            log.info("future already get xhaka-id:{} request, now:{}", xhakaId, System.currentTimeMillis());
         } catch (XhakaSlaveTimeoutException e) {
             DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.REQUEST_TIMEOUT);
             HttpUtil.setContentLength(response, 0);
