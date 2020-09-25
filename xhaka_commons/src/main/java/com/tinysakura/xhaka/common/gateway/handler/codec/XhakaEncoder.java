@@ -37,5 +37,6 @@ public class XhakaEncoder extends MessageToMessageEncoder<Xhaka> {
         }
 
         list.add(byteBuf);
+        log.info("send xhaka-id:{} request, now:{}", xhaka.getXhakaId(), System.currentTimeMillis());
     }
 }
