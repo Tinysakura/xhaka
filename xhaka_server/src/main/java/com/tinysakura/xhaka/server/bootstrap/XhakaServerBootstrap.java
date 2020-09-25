@@ -41,7 +41,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
             Integer port = Integer.valueOf(Objects.requireNonNull(context.getEnvironment().getProperty("server.port")));
             String contextPath = context.getEnvironment().getProperty("server.servlet.context-path");
             String businessThreadCountProperty = context.getEnvironment().getProperty("xhaka.gateway.business.thread.count");
-            Integer businessThreadCount = 100;
+            Integer businessThreadCount = 20;
             if (StringUtils.isNotEmpty(businessThreadCountProperty)) {
                 businessThreadCount = Integer.valueOf(businessThreadCountProperty);
             }
