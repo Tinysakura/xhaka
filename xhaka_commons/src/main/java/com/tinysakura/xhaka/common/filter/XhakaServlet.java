@@ -66,7 +66,7 @@ public class XhakaServlet implements Servlet {
          */
         FullHttpResponse fullHttpResponse = null;
         try {
-            String xhakaId = fullHttpResponse.headers().get("xhaka-id");
+            String xhakaId = xhakaHttpServletRequest.getHeader("xhaka-id");
             log.info("future wait to get xhaka-id:{} request, now:{}", xhakaId, System.currentTimeMillis());
             fullHttpResponse = future.get(XhakaGateWayConfig.getInstance().getSlaveResponseTimeout());
             log.info("future already get xhaka-id:{} request, now:{}", xhakaId, System.currentTimeMillis());
