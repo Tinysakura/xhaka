@@ -53,7 +53,7 @@ public class XhakaSlaveServer implements WebServer {
         bossGroup = new NioEventLoopGroup(1);
         // 默认为cpu核数 * 2
         workerGroup = new NioEventLoopGroup();
-        //businessGroup = new DefaultEventLoopGroup(XhakaGateWayConfig.getInstance().getSlaveBusinessThreadCount());
+        businessGroup = new DefaultEventLoopGroup(XhakaGateWayConfig.getInstance().getSlaveBusinessThreadCount());
 
         ChannelFuture future = serverBootstrap.channel(NioServerSocketChannel.class)
                 .group(bossGroup, workerGroup)
@@ -69,7 +69,7 @@ public class XhakaSlaveServer implements WebServer {
                                 //将FullHttpRequest转换为适配Servlet容器的xhakaHttpServletRequest
                                 .addLast(new FullHttpRequest2HttpServletHandler())
                                 //代理服务处理servlet request
-                                .addLast(new SlaveXhakaHttpServletHandler())
+                                .addLast(businessGroup, new SlaveXhakaHttpServletHandler())
                                 //将响应转换为xhaka协议发送给调用网关
                                 .addLast(new FullHttpResponse2XhakaEncoder())
                                 .addLast(new XhakaEncoder());

@@ -47,7 +47,7 @@ public class XhakaFuture {
                 }
             }
         } catch (InterruptedException e) {
-           log.error("get xhaka slave response occur InterruptedException", e);
+            log.error("get xhaka slave response occur InterruptedException", e);
         } finally {
             lock.unlock();
         }
