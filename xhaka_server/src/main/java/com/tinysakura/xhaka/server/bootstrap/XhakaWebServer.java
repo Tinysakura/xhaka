@@ -3,10 +3,8 @@ package com.tinysakura.xhaka.server.bootstrap;
 import com.tinysakura.xhaka.common.handler.FullHttpRequest2HttpServletHandler;
 import com.tinysakura.xhaka.server.handler.XhakaHttpServletHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.DefaultEventLoopGroup;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -64,7 +62,7 @@ public class XhakaWebServer implements WebServer {
                                 .addLast(new FullHttpRequest2HttpServletHandler())
                                 .addLast(businessGroup, new XhakaHttpServletHandler());
                     }
-                }).bind(inetSocketAddress).awaitUninterruptibly();
+                }).childOption(ChannelOption.TCP_NODELAY, true).option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT).option(ChannelOption.TCP_NODELAY, true).bind(inetSocketAddress).awaitUninterruptibly();
 
         if (future.cause() != null) {
             log.error("start netty web server failed", future.cause());
