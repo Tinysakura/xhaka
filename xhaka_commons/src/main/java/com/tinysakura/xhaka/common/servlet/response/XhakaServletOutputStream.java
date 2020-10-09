@@ -65,21 +65,28 @@ public class XhakaServletOutputStream extends ServletOutputStream {
         ChannelHandlerContext ctx = xhakaHttpServletResponse.getCtx();
         if (ctx.channel().isActive()) {
             if (chunked && !flushed) {
-                ctx.writeAndFlush(xhakaHttpServletResponse);
+                ctx.channel().eventLoop().execute(() -> {
+                    ctx.writeAndFlush(xhakaHttpServletResponse);
+                });
+
                 this.flushed = true;
                 return;
             }
 
             if (!flushed) {
-                try {
+                ctx.channel().eventLoop().execute(() -> {
                     HttpServerCodec httpServerCodec = ctx.pipeline().get(HttpServerCodec.class);
                     if (httpServerCodec != null) {
-                        httpServerCodec.write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
-                        httpServerCodec.flush(ctx);
+                        try {
+                            httpServerCodec.write(ctx, xhakaHttpServletResponse.getOriginResponse(), ctx.voidPromise());
+                            httpServerCodec.flush(ctx);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                });
+
+                this.flushed = true;
             }
         }
     }
