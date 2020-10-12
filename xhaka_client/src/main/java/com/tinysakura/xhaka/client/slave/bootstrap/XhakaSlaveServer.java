@@ -53,7 +53,7 @@ public class XhakaSlaveServer implements WebServer {
         bossGroup = new NioEventLoopGroup(1);
         // 默认为cpu核数 * 2
         workerGroup = new NioEventLoopGroup();
-        businessGroup = new DefaultEventLoopGroup(20);
+        businessGroup = new DefaultEventLoopGroup(XhakaGateWayConfig.getInstance().getSlaveBusinessThreadCount());
 
         ChannelFuture future = serverBootstrap.channel(NioServerSocketChannel.class)
                 .group(bossGroup, workerGroup)
