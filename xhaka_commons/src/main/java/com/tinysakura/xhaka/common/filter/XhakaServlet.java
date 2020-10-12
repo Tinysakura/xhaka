@@ -47,6 +47,7 @@ public class XhakaServlet implements Servlet {
         // 网关转发部分逻辑
         String dispatcherServerName = ServerDispatcher.getDispatcherServerName(xhakaHttpServletRequest);
         Channel slaveChannel = GatewaySlaveChannelPool.getInstance().getSlaveChannelByLoadBalanceStrategy(XhakaGateWayConfig.getInstance().getLoadBalance(), dispatcherServerName);
+        log.info("thread:{} obtain slaveChannel time : {}", Thread.currentThread().getName(), System.currentTimeMillis());
 
         if (slaveChannel == null) {
             DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
