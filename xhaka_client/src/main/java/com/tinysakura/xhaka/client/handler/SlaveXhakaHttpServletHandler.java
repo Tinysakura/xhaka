@@ -20,7 +20,9 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, XhakaHttpServletRequest xhakaHttpServletRequest) throws Exception {
-        log.info("SlaveXhakaHttpServletHandler, xhakaHttpServletRequest:{}", xhakaHttpServletRequest);
+        //log.info("SlaveXhakaHttpServletHandler, xhakaHttpServletRequest:{}", xhakaHttpServletRequest);
+        String xhakaId = xhakaHttpServletRequest.getHeader("xhaka-id");
+        log.info("SlaveXhakaHttpServletHandler begin xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
 
         // 根据被代理服务的servlet容器类型处理请求
         // 目前只支持tomcat
@@ -29,6 +31,8 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
             dispatch.dispatch(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
 
             xhakaHttpServletRequest.getOriginalRequest().release();
+
+            log.info("SlaveXhakaHttpServletHandler end xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
             channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
         }
     }
