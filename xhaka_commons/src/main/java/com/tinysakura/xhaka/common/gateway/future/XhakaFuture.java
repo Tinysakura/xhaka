@@ -37,13 +37,13 @@ public class XhakaFuture {
                 lock.lock();
 
                 while (!isReceivedResponse()) {
-                    Boolean timeOut = done.await(timeout, TimeUnit.SECONDS);
+                    Boolean timeOut = !done.await(timeout, TimeUnit.SECONDS);
 
                     String xhakaId = response.headers().get("xhaka-id");
                     if (!timeOut) {
                         log.info("await end, xhaka-id:{} repsonse, now:{}", xhakaId, System.currentTimeMillis());
                     } else {
-                        log.info("await timeOut, xhaka-id:{}, now", xhakaId, System.currentTimeMillis());
+                        log.info("await timeOut, xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
                     }
 
                     if (isReceivedResponse() || System.currentTimeMillis() - start > timeout) {
