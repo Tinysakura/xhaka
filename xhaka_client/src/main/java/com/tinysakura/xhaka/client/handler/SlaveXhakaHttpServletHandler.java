@@ -20,6 +20,7 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, XhakaHttpServletRequest xhakaHttpServletRequest) throws Exception {
         //log.info("SlaveXhakaHttpServletHandler, xhakaHttpServletRequest:{}", xhakaHttpServletRequest);
         String xhakaId = xhakaHttpServletRequest.getHeader("xhaka-id");
+        log.info(Thread.currentThread().getName());
         log.info("SlaveXhakaHttpServletHandler begin xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
 
         // 根据被代理服务的servlet容器类型处理请求
