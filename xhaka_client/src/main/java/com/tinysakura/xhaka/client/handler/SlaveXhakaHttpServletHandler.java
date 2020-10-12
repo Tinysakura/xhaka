@@ -23,7 +23,7 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, XhakaHttpServletRequest xhakaHttpServletRequest) {
         //log.info("SlaveXhakaHttpServletHandler, xhakaHttpServletRequest:{}", xhakaHttpServletRequest);
-        channelHandlerContext.executor().execute(() -> {
+        channelHandlerContext.executor().parent().execute(() -> {
             String xhakaId = xhakaHttpServletRequest.getHeader("xhaka-id");
             log.info("threadName:{}", Thread.currentThread().getName());
             log.info("SlaveXhakaHttpServletHandler begin xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
