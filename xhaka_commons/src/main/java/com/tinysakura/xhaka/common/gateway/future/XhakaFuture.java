@@ -26,8 +26,11 @@ public class XhakaFuture {
 
     private FullHttpResponse response;
 
+    private Long xhakaRequestId;
+
     public XhakaFuture(Long xhakaRequestId) {
         FUTURES.put(xhakaRequestId, this);
+        this.xhakaRequestId = xhakaRequestId;
     }
 
     public FullHttpResponse get(Integer timeout) throws Exception {
@@ -57,6 +60,7 @@ public class XhakaFuture {
             lock.unlock();
         }
 
+        log.info("break loop, xhaka-id:{}", xhakaRequestId);
         if (!isReceivedResponse()) {
             throw new XhakaSlaveTimeoutException();
         }
