@@ -14,6 +14,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletResponse;
@@ -23,13 +24,14 @@ import javax.servlet.http.HttpServletResponse;
  * @Author: chenfeihao@corp.netease.com
  * @Date: 2020/8/21
  */
-
+@Slf4j
 public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHttpServletRequest> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, XhakaHttpServletRequest xhakaHttpServletRequest) throws Exception {
         FilterChain filterChain = XhakaFilterChainFactory.createFilterChain(xhakaHttpServletRequest, ctx);
         filterChain.doFilter(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
+        log.info("threadName:{}", Thread.currentThread().getName());
 
 //        // 网关转发部分逻辑
 //        String dispatcherServerName = ServerDispatcher.getDispatcherServerName(xhakaHttpServletRequest);
