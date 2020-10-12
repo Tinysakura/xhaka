@@ -22,7 +22,7 @@ public class TestFIlter2 implements Filter {
 
         chain.doFilter(request, response);
 
-        log.info("TestFilter2:{} before", request);
+        log.info("TestFilter2:{} after", request);
     }
 
     @Override
