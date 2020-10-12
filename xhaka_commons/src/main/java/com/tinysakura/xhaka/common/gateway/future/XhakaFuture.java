@@ -42,7 +42,7 @@ public class XhakaFuture {
                 while (!isReceivedResponse()) {
                     log.info("进入循环，xhaka-id:{}", xhakaRequestId);
                     Boolean timeOut = !done.await(timeout, TimeUnit.SECONDS);
-                    log.info("超时，xhaka-id:{}", xhakaRequestId);
+                    log.info("超时，xhaka-id:{}, timeOut:{}", xhakaRequestId, timeOut);
 
                     String xhakaId = response.headers().get("xhaka-id");
                     if (!timeOut) {
