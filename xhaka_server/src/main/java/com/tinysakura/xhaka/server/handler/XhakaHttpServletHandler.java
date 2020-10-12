@@ -31,7 +31,6 @@ public class XhakaHttpServletHandler extends SimpleChannelInboundHandler<XhakaHt
     protected void channelRead0(ChannelHandlerContext ctx, XhakaHttpServletRequest xhakaHttpServletRequest) throws Exception {
         FilterChain filterChain = XhakaFilterChainFactory.createFilterChain(xhakaHttpServletRequest, ctx);
         filterChain.doFilter(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
-        log.info("threadName:{}", Thread.currentThread().getName());
 
 //        // 网关转发部分逻辑
 //        String dispatcherServerName = ServerDispatcher.getDispatcherServerName(xhakaHttpServletRequest);
