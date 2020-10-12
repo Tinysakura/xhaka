@@ -40,6 +40,7 @@ public class XhakaFuture {
                 lock.lock();
 
                 while (!isReceivedResponse()) {
+                    log.info("进入循环，xhaka-id:{}", xhakaRequestId);
                     Boolean timeOut = !done.await(timeout, TimeUnit.SECONDS);
 
                     String xhakaId = response.headers().get("xhaka-id");
