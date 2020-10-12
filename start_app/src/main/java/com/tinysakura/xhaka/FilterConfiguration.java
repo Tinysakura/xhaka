@@ -1,5 +1,6 @@
 package com.tinysakura.xhaka;
 
+import com.tinysakura.xhaka.filter.TestFIlter2;
 import com.tinysakura.xhaka.filter.TestFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class FilterConfiguration {
 
     @Bean
-    public FilterRegistrationBean httpToHttpsFilterRegistrationBean() {
+    public FilterRegistrationBean testFilter() {
 
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new TestFilter());
@@ -22,5 +23,17 @@ public class FilterConfiguration {
 
         return registration;
     }
+
+    @Bean
+    public FilterRegistrationBean testFilter2() {
+
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new TestFIlter2());
+
+        registration.addUrlPatterns("/*");
+
+        return registration;
+    }
+
 
 }
