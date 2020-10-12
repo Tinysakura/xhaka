@@ -20,6 +20,7 @@ public class FilterConfiguration {
         registration.setFilter(new TestFilter());
 
         registration.addUrlPatterns("/*");
+        registration.setOrder(2);
 
         return registration;
     }
@@ -31,6 +32,7 @@ public class FilterConfiguration {
         registration.setFilter(new TestFIlter2());
 
         registration.addUrlPatterns("/*");
+        registration.setOrder(1);
 
         return registration;
     }
