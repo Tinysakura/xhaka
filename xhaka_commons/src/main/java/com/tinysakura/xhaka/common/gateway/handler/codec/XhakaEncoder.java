@@ -19,7 +19,7 @@ public class XhakaEncoder extends MessageToMessageEncoder<Xhaka> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Xhaka xhaka, List<Object> list) throws Exception {
-        log.info("MessageToMessageEncoder, xhaka:{}", xhaka);
+        log.debug("MessageToMessageEncoder, xhaka:{}", xhaka);
 
         ByteBuf byteBuf;
         if (xhaka.getBody() != null) {
@@ -37,6 +37,6 @@ public class XhakaEncoder extends MessageToMessageEncoder<Xhaka> {
         }
 
         list.add(byteBuf);
-        log.info("send xhaka-id:{} request, now:{}", xhaka.getXhakaId(), System.currentTimeMillis());
+        log.debug("send xhaka-id:{} request, now:{}", xhaka.getXhakaId(), System.currentTimeMillis());
     }
 }

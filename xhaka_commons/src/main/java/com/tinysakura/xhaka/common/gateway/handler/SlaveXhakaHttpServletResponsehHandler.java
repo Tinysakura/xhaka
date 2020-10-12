@@ -18,7 +18,7 @@ public class SlaveXhakaHttpServletResponsehHandler extends SimpleChannelInboundH
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpResponse fullHttpResponse) throws Exception {
         // 唤醒网关向代理服务发起请求的业务线程，拿到代理服务的响应结果
         String xhakaId = fullHttpResponse.headers().get("xhaka-id");
-        log.info("receive xhaka-id:{} repsonse, now:{}", xhakaId, System.currentTimeMillis());
+        log.debug("receive xhaka-id:{} repsonse, now:{}", xhakaId, System.currentTimeMillis());
 
         XhakaFuture.received(fullHttpResponse);
     }

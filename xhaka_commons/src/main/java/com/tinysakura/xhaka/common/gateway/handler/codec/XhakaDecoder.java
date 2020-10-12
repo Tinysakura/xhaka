@@ -37,7 +37,7 @@ public class XhakaDecoder extends LengthFieldBasedFrameDecoder {
             frame.release();
 
             xhaka.setBody(ArrayUtils.subarray(bytes, 13, bytes.length));
-            log.info("receive xhaka-id:{} response, now:{}", xhaka.getXhakaId(), System.currentTimeMillis());
+            log.debug("receive xhaka-id:{} response, now:{}", xhaka.getXhakaId(), System.currentTimeMillis());
 
             return xhaka;
         } catch (Exception e) {
