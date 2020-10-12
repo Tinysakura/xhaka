@@ -7,8 +7,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.AsyncDispatcher;
 
-import javax.servlet.RequestDispatcher;
-
 /**
  * 让被代理方的servlet容器处理请求
  * @Author: chenfeihao@corp.netease.com
@@ -33,7 +31,9 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
             xhakaHttpServletRequest.getOriginalRequest().release();
 
             log.info("SlaveXhakaHttpServletHandler end xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
-            channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
+            channelHandlerContext.channel().eventLoop().execute(() -> {
+                channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
+            });
         }
     }
 }
