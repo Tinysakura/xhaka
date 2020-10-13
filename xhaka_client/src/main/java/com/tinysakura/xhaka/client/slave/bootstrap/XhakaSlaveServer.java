@@ -10,10 +10,7 @@ import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaDecoder;
 import com.tinysakura.xhaka.common.gateway.handler.codec.XhakaEncoder;
 import com.tinysakura.xhaka.common.handler.FullHttpRequest2HttpServletHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.DefaultEventLoopGroup;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -74,7 +71,7 @@ public class XhakaSlaveServer implements WebServer {
                                 .addLast(new FullHttpResponse2XhakaEncoder())
                                 .addLast(new XhakaEncoder());
                     }
-                }).bind(inetSocketAddress).awaitUninterruptibly();
+                }).option(ChannelOption.SINGLE_EVENTEXECUTOR_PER_GROUP, false).bind(inetSocketAddress).awaitUninterruptibly();
 
         if (future.cause() != null) {
             log.error("start xhaka slave server failed", future.cause());
