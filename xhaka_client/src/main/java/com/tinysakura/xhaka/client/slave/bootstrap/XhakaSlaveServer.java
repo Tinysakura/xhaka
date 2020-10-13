@@ -57,7 +57,6 @@ public class XhakaSlaveServer implements WebServer {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
-                        socketChannel.config().setOption(ChannelOption.SINGLE_EVENTEXECUTOR_PER_GROUP, false);
                         socketChannel.pipeline()
                                 .addLast(new XhakaDecoder(XhakaGateWayConfig.getInstance().getXhakaMsgMaxLength(), 0, 4))
                                 //处理xhaka协议
