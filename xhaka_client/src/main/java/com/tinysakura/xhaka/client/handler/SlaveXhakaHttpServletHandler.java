@@ -23,28 +23,51 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, XhakaHttpServletRequest xhakaHttpServletRequest) {
         //log.info("SlaveXhakaHttpServletHandler, xhakaHttpServletRequest:{}", xhakaHttpServletRequest);
-        channelHandlerContext.executor().parent().execute(() -> {
-            String xhakaId = xhakaHttpServletRequest.getHeader("xhaka-id");
-            log.info("threadName:{}", Thread.currentThread().getName());
-            log.info("SlaveXhakaHttpServletHandler begin xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
+//        channelHandlerContext.executor().parent().execute(() -> {
+//            String xhakaId = xhakaHttpServletRequest.getHeader("xhaka-id");
+//            log.info("threadName:{}", Thread.currentThread().getName());
+//            log.info("SlaveXhakaHttpServletHandler begin xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
+//
+//            // 根据被代理服务的servlet容器类型处理请求
+//            // 目前只支持tomcat
+//            if (TomcatServletContext.getInstance().isCurrentWebServer()) {
+//                AsyncDispatcher dispatch = (AsyncDispatcher) TomcatServletContext.getInstance().getDispatch(xhakaHttpServletRequest.getRequestURI());
+//                try {
+//                    dispatch.dispatch(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
+//                } catch (Exception e) {
+//                    xhakaHttpServletRequest.getHttpServletResponse().setStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+//                }
+//
+//                xhakaHttpServletRequest.getOriginalRequest().release();
+//
+//                log.info("SlaveXhakaHttpServletHandler end xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
+//                channelHandlerContext.channel().eventLoop().execute(() -> {
+//                    channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
+//                });
+//            }
+//        });
 
-            // 根据被代理服务的servlet容器类型处理请求
-            // 目前只支持tomcat
-            if (TomcatServletContext.getInstance().isCurrentWebServer()) {
-                AsyncDispatcher dispatch = (AsyncDispatcher) TomcatServletContext.getInstance().getDispatch(xhakaHttpServletRequest.getRequestURI());
-                try {
-                    dispatch.dispatch(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
-                } catch (Exception e) {
-                    xhakaHttpServletRequest.getHttpServletResponse().setStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-                }
+        String xhakaId = xhakaHttpServletRequest.getHeader("xhaka-id");
+        log.info("threadName:{}", Thread.currentThread().getName());
+        log.info("SlaveXhakaHttpServletHandler begin xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
 
-                xhakaHttpServletRequest.getOriginalRequest().release();
-
-                log.info("SlaveXhakaHttpServletHandler end xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
-                channelHandlerContext.channel().eventLoop().execute(() -> {
-                    channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
-                });
+        // 根据被代理服务的servlet容器类型处理请求
+        // 目前只支持tomcat
+        if (TomcatServletContext.getInstance().isCurrentWebServer()) {
+            AsyncDispatcher dispatch = (AsyncDispatcher) TomcatServletContext.getInstance().getDispatch(xhakaHttpServletRequest.getRequestURI());
+            try {
+                dispatch.dispatch(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
+            } catch (Exception e) {
+                xhakaHttpServletRequest.getHttpServletResponse().setStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
             }
-        });
+
+            xhakaHttpServletRequest.getOriginalRequest().release();
+
+            log.info("SlaveXhakaHttpServletHandler end xhaka-id:{}, now:{}", xhakaId, System.currentTimeMillis());
+            channelHandlerContext.channel().eventLoop().execute(() -> {
+                channelHandlerContext.channel().writeAndFlush(xhakaHttpServletRequest.getHttpServletResponse().getOriginResponse());
+            });
+        }
+
     }
 }
