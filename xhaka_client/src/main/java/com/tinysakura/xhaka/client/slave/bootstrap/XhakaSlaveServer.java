@@ -57,6 +57,7 @@ public class XhakaSlaveServer implements WebServer {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
+                        socketChannel.config().setOption(ChannelOption.SINGLE_EVENTEXECUTOR_PER_GROUP, false);
                         socketChannel.pipeline()
                                 .addLast(new XhakaDecoder(XhakaGateWayConfig.getInstance().getXhakaMsgMaxLength(), 0, 4))
                                 //处理xhaka协议
@@ -71,7 +72,7 @@ public class XhakaSlaveServer implements WebServer {
                                 .addLast(new FullHttpResponse2XhakaEncoder())
                                 .addLast(new XhakaEncoder());
                     }
-                }).option(ChannelOption.SINGLE_EVENTEXECUTOR_PER_GROUP, false).bind(inetSocketAddress).awaitUninterruptibly();
+                }).bind(inetSocketAddress).awaitUninterruptibly();
 
         if (future.cause() != null) {
             log.error("start xhaka slave server failed", future.cause());
