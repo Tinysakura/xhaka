@@ -1,11 +1,6 @@
 package com.tinysakura.xhaka.client.slave.bootstrap;
 
-import com.tinysakura.xhaka.client.filter.FilterAsyncDispatcherSupportEnhance;
 import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.matcher.ElementMatchers;
-import org.apache.catalina.core.ApplicationFilterRegistration;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.ApplicationArguments;
@@ -24,8 +19,6 @@ public class XhakaSlaveBootstrap implements ApplicationRunner, ApplicationContex
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        enhanceApplicationFilterRegistration();
-
         String serverName = context.getEnvironment().getProperty("app_name");
         if (StringUtils.isEmpty(serverName)) {
             serverName = context.getEnvironment().getProperty("spring.application.name");
@@ -48,13 +41,5 @@ public class XhakaSlaveBootstrap implements ApplicationRunner, ApplicationContex
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
-    }
-
-    private void enhanceApplicationFilterRegistration() {
-        new ByteBuddy().subclass(ApplicationFilterRegistration.class)
-                .method(ElementMatchers.named("addMappingForServletNames"))
-                .intercept(MethodDelegation.to(FilterAsyncDispatcherSupportEnhance.class))
-                .make()
-                .load(ClassLoader.getSystemClassLoader());
     }
 }
