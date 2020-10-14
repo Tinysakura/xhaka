@@ -51,7 +51,7 @@ public class HeartbeatPacemaker {
 
     public void pacemaker(String serverName, String ip, Channel channel) {
         // 自旋
-        while (atomicReference.compareAndSet(null, Thread.currentThread())) {
+        while (!atomicReference.compareAndSet(null, Thread.currentThread())) {
             log.debug("spin in thread:{}", Thread.currentThread());
         }
 
@@ -71,7 +71,7 @@ public class HeartbeatPacemaker {
     }
 
     public void removePacemaker(String serverName, String ip) {
-        while (atomicReference.compareAndSet(null, Thread.currentThread())) {
+        while (!atomicReference.compareAndSet(null, Thread.currentThread())) {
             log.debug("spin in thread:{}", Thread.currentThread());
         }
 
