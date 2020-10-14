@@ -72,6 +72,7 @@ public class XhakaGatewayClient {
                 f.channel().closeFuture().addListener(future -> {
                     log.debug("连接关闭:{}", remoteHost + ":" + remotePort);
                     GatewaySlaveChannelPool.getInstance().removeSlaveChannelFromPool(serverName, remoteHost + ":" + remotePort);
+                    disconnect();
                 });
                 f.channel().closeFuture().sync();
             } else {
@@ -82,7 +83,7 @@ public class XhakaGatewayClient {
         }
     }
 
-    public void disconnect() {
+    private void disconnect() {
         try {
             if (workerGroup != null) {
                 workerGroup.shutdownGracefully().await();
