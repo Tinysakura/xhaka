@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -24,6 +25,13 @@ public class ServerDispatcher {
 
     public static String getDispatcherServerName(XhakaHttpServletRequest httpServletRequest) {
         String requestURI = httpServletRequest.getRequestURI();
+
+        // if request not belong contextPath, return 404
+        if (!requestURI.startsWith(httpServletRequest.getContextPath())) {
+            return null;
+        }
+
+        requestURI = requestURI.replaceFirst(httpServletRequest.getContextPath(), "");
 
         for (Map.Entry<String, XhakaRouteProperties.Route> entry : XhakaRouteProperties.getInstance().getRoutes().entrySet()) {
             if (pathMatcher.match(entry.getValue().getUrl(), requestURI)) {
