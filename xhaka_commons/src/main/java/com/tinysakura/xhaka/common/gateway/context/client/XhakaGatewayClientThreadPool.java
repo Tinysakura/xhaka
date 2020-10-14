@@ -80,7 +80,7 @@ public class XhakaGatewayClientThreadPool {
         }
 
         String getName() {
-            return "XhakaGatewayClient_" + serverName;
+            return "XhakaGatewayClient_" + serverName + "_" + host + ":" + port;
         }
 
         @Override
