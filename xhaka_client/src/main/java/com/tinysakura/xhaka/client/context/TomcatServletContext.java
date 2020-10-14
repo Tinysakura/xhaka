@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.RequestDispatcher;
 import java.lang.reflect.Field;
 
@@ -58,6 +59,15 @@ public class TomcatServletContext implements ApplicationContextAware {
             this.standardContext = (StandardContext) standardContextField.get(tomcatApplicationContext);
             currentWebServer = true;
             instance = this;
+
+            // filter auto async support
+            FilterMap[] filterMaps = this.standardContext.findFilterMaps();
+            for (FilterMap filterMap : filterMaps) {
+                if ((filterMap.getDispatcherMapping() & 16) == 0) {
+                    filterMap.setDispatcher("async");
+                }
+            }
+
         } catch (Exception e) {
             log.info("init TomcatServletContext failed : {}", e);
         }
