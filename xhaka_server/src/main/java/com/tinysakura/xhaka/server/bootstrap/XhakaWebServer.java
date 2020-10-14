@@ -48,7 +48,7 @@ public class XhakaWebServer implements WebServer {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         bossGroup = new NioEventLoopGroup(1);
         // 默认为cpu核数 * 2
-        workerGroup = new NioEventLoopGroup(20);
+        workerGroup = new NioEventLoopGroup();
         businessGroup = new DefaultEventLoopGroup(businessThreadCount);
 
         ChannelFuture future = serverBootstrap.channel(NioServerSocketChannel.class)
