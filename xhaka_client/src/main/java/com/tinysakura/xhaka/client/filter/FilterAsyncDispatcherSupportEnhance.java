@@ -14,13 +14,13 @@ import java.util.EnumSet;
 public class FilterAsyncDispatcherSupportEnhance {
 
     public static void addMappingForServletNames(
-            @Super ApplicationFilterRegistration zuper,
+            //Super ApplicationFilterRegistration zuper,
             EnumSet<DispatcherType> dispatcherTypes, boolean isMatchAfter,
             String[] servletNames) {
         if (!dispatcherTypes.contains(DispatcherType.ASYNC)) {
             dispatcherTypes.add(DispatcherType.ASYNC);
         }
 
-        zuper.addMappingForServletNames(dispatcherTypes, isMatchAfter, servletNames);
+        //zuper.addMappingForServletNames(dispatcherTypes, isMatchAfter, servletNames);
     }
 }
