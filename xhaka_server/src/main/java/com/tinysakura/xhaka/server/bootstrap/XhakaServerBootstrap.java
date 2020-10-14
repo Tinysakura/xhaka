@@ -35,13 +35,15 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
 
     private ApplicationContext context;
 
+    private static final Integer DEFAULT_GATEWAY_BUSINESS_THREAD_COUNT = 500;
+
     @Override
     public void run(ApplicationArguments args) {
         try {
             Integer port = Integer.valueOf(Objects.requireNonNull(context.getEnvironment().getProperty("server.port")));
             String contextPath = context.getEnvironment().getProperty("server.servlet.context-path");
             String businessThreadCountProperty = context.getEnvironment().getProperty("xhaka.gateway.business.thread.count");
-            Integer businessThreadCount = 500;
+            Integer businessThreadCount = DEFAULT_GATEWAY_BUSINESS_THREAD_COUNT;
             if (StringUtils.isNotEmpty(businessThreadCountProperty)) {
                 businessThreadCount = Integer.valueOf(businessThreadCountProperty);
             }
