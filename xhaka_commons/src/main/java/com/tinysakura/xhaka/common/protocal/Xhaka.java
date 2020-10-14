@@ -79,6 +79,10 @@ public class Xhaka {
         BytesUtils.long2bytes(xhakaId, header, 1);
     }
 
+    /**
+     * bodyLength != getBody.length()，bodyLength中为body中去除请求头后的长度
+     * @return
+     */
     public Integer getBodyLength() {
         return BytesUtils.bytes2int(header, 9);
     }
