@@ -65,7 +65,7 @@ public class XhakaServerBootstrap implements ApplicationRunner, ApplicationConte
                 }
             }
 
-            // watch zk path
+            // 3. watch zk path
             PathChildrenCache pathChildrenCache = new PathChildrenCache(zkClient, XhakaDiscoveryConstant.REGISTER_SERVER_PARENT_PATH, false);
             pathChildrenCache.getListenable().addListener(new PathChildrenCacheListener() {
                 @Override
