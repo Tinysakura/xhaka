@@ -1,6 +1,7 @@
 package com.tinysakura.xhaka.common.servlet.request;
 
 import com.tinysakura.xhaka.common.context.XhakaWebServerContext;
+import com.tinysakura.xhaka.common.servlet.parser.AcceptLanguage;
 import com.tinysakura.xhaka.common.servlet.parser.CookieParser;
 import com.tinysakura.xhaka.common.servlet.parser.ProtocolParser;
 import com.tinysakura.xhaka.common.servlet.parser.UriParser;
@@ -17,10 +18,7 @@ import org.springframework.util.CollectionUtils;
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.security.Principal;
 import java.util.*;
@@ -61,6 +59,10 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
     private ProtocolParser protocolParser;
 
     private UriParser uriParser;
+
+    private boolean localesParsed = false;
+
+    private final ArrayList<Locale> locales = new ArrayList<>();
 
     public XhakaHttpServletRequest(FullHttpRequest originalRequest,
                                    ChannelHandlerContext ctx) {
@@ -490,12 +492,82 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     @Override
     public Locale getLocale() {
-        throw new IllegalStateException("getLocale not support");
+        if (!localesParsed) {
+            parseLocales();
+        }
+
+        if (locales.size() > 0) {
+            return locales.get(0);
+        }
+
+        return Locale.getDefault();
+    }
+
+    protected void parseLocales() {
+
+        localesParsed = true;
+
+        // Store the accumulated languages that have been requested in
+        // a local collection, sorted by the quality value (so we can
+        // add Locales in descending order).  The values will be ArrayLists
+        // containing the corresponding Locales to be added
+        TreeMap<Double, ArrayList<Locale>> locales = new TreeMap<>();
+
+        Enumeration<String> values = getHeaders("accept-language");
+
+        while (values.hasMoreElements()) {
+            String value = values.nextElement();
+            parseLocalesHeader(value, locales);
+        }
+
+        // Process the quality values in highest->lowest order (due to
+        // negating the Double value when creating the key)
+        for (ArrayList<Locale> list : locales.values()) {
+            for (Locale locale : list) {
+                addLocale(locale);
+            }
+        }
+    }
+
+    protected void parseLocalesHeader(String value, TreeMap<Double, ArrayList<Locale>> locales) {
+
+        List<AcceptLanguage> acceptLanguages;
+        try {
+            acceptLanguages = AcceptLanguage.parse(new StringReader(value));
+        } catch (IOException e) {
+            // Mal-formed headers are ignore. Do the same in the unlikely event
+            // of an IOException.
+            return;
+        }
+
+        for (AcceptLanguage acceptLanguage : acceptLanguages) {
+            // Add a new Locale to the list of Locales for this quality level
+            Double key = Double.valueOf(-acceptLanguage.getQuality());  // Reverse the order
+            ArrayList<Locale> values = locales.get(key);
+            if (values == null) {
+                values = new ArrayList<>();
+                locales.put(key, values);
+            }
+            values.add(acceptLanguage.getLocale());
+        }
+    }
+
+    public void addLocale(Locale locale) {
+        locales.add(locale);
     }
 
     @Override
     public Enumeration<Locale> getLocales() {
-        throw new IllegalStateException("getLocales not support");
+        if (!localesParsed) {
+            parseLocales();
+        }
+
+        if (locales.size() > 0) {
+            return Collections.enumeration(locales);
+        }
+        ArrayList<Locale> results = new ArrayList<>();
+        results.add(Locale.getDefault());
+        return Collections.enumeration(results);
     }
 
     @Override
@@ -555,7 +627,7 @@ public class XhakaHttpServletRequest implements HttpServletRequest {
 
     @Override
     public boolean isAsyncSupported() {
-        return false;
+        return true;
     }
 
     @Override
