@@ -22,14 +22,15 @@ import java.lang.reflect.Field;
 @Slf4j
 @Component
 public class TomcatServletContext implements ApplicationContextAware {
-    private FilterMap[] filterMaps;
-
     private StandardContext standardContext;
 
     private org.apache.catalina.core.ApplicationContext applicationContext;
 
     private static TomcatServletContext instance;
 
+    /**
+     * 标记当前slave的servlet容器是否是tomcat
+     */
     private static boolean currentWebServer = false;
 
     @Override
@@ -53,10 +54,8 @@ public class TomcatServletContext implements ApplicationContextAware {
 
             Field standardContextField = tomcatApplicationContext.getClass().getDeclaredField("context");
             standardContextField.setAccessible(true);
-            StandardContext standardContext = (StandardContext) standardContextField.get(tomcatApplicationContext);
 
-            this.filterMaps = standardContext.findFilterMaps();
-            this.standardContext = standardContext;
+            this.standardContext = (StandardContext) standardContextField.get(tomcatApplicationContext);
             currentWebServer = true;
             instance = this;
         } catch (Exception e) {
@@ -65,7 +64,7 @@ public class TomcatServletContext implements ApplicationContextAware {
     }
 
     public FilterMap[] getFilterMaps() {
-        return this.filterMaps;
+        return this.standardContext.findFilterMaps();
     }
 
     public boolean isCurrentWebServer() {

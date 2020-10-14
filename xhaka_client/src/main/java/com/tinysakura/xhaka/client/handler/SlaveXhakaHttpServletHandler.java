@@ -36,6 +36,7 @@ public class SlaveXhakaHttpServletHandler extends SimpleChannelInboundHandler<Xh
                     dispatch.dispatch(xhakaHttpServletRequest, xhakaHttpServletRequest.getHttpServletResponse());
                 } catch (Exception e) {
                     xhakaHttpServletRequest.getHttpServletResponse().setStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+                    log.error("servlet dispatch error", e);
                 }
 
                 xhakaHttpServletRequest.getOriginalRequest().release();
