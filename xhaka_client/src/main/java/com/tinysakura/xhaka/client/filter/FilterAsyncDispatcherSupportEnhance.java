@@ -14,9 +14,9 @@ import java.util.EnumSet;
 public class FilterAsyncDispatcherSupportEnhance {
 
     public static void addMappingForServletNames(
-            EnumSet<DispatcherType> dispatcherTypes, boolean isMatchAfter,
             @Super ApplicationFilterRegistration zuper,
-            String... servletNames) {
+            EnumSet<DispatcherType> dispatcherTypes, boolean isMatchAfter,
+            String[] servletNames) {
         if (!dispatcherTypes.contains(DispatcherType.ASYNC)) {
             dispatcherTypes.add(DispatcherType.ASYNC);
         }
