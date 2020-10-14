@@ -25,14 +25,7 @@ public class XhakaDiscovery {
 
             if (stat == null) {
                 zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(zkPath);
-                //zkClient.setData().forPath(zkPath,(host + ":" + port).getBytes(Charset.forName("UTF-8")));
             }
-
-//            else {
-//                String old = new String(zkClient.getData().forPath(zkPath), Charset.forName("UTF-8"));
-//                old += host + ":" + port;
-//                zkClient.setData().forPath(zkPath, old.getBytes(Charset.forName("UTF-8")));
-//            }
 
             log.info("server:{} register success, ip:{}", serverName, host + ":" + port);
         } catch (Exception e) {
