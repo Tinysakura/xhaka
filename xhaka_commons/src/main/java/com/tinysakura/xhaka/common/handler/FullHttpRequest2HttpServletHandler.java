@@ -9,8 +9,6 @@ import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.nio.charset.Charset;
-
 /**
  * 将FullHttp Request包装成HttpServletRequest实现
  * @Author: chenfeihao@corp.netease.com
@@ -23,12 +21,9 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) {
         log.info("FullHttpRequest2HttpServletHandler, fullHttpRequest:{}", fullHttpRequest);
         XhakaHttpServletRequest xhakaHttpServletRequest = new XhakaHttpServletRequest(fullHttpRequest, ctx);
-//        byte[] a = new byte[fullHttpRequest.content().readableBytes()];
-//        fullHttpRequest.content().readBytes(a);
-//        System.out.println(new String(a, Charset.forName("UTF-8")));
 
         XhakaHttpServletResponse xhakaHttpServletResponse = new XhakaHttpServletResponse(xhakaHttpServletRequest, ctx);
         // 设置xhakaid（slave端逻辑，salve和gateway复用了同一个ChannelHandler）
@@ -36,7 +31,6 @@ public class FullHttpRequest2HttpServletHandler extends SimpleChannelInboundHand
             xhakaHttpServletResponse.addHeader(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID, fullHttpRequest.headers().get(XhakaHttpHeaderConstant.HTTP_HEADER_XHAKA_ID));
         }
         xhakaHttpServletRequest.setHttpServletResponse(xhakaHttpServletResponse);
-
 
         if (HttpUtil.is100ContinueExpected(fullHttpRequest)) {
             ctx.write(DEFAULT_CONTINUE_FULLHTTP_RESPONSE, ctx.voidPromise());
