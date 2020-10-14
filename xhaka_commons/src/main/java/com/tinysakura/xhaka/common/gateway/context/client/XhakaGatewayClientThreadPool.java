@@ -46,10 +46,11 @@ public class XhakaGatewayClientThreadPool {
     public static synchronized void submit(Runnable runnable) {
         assert runnable instanceof XhakaGatewayClientRunnable;
         String name = ((XhakaGatewayClientRunnable) runnable).getName();
-        log.info("submit runnable name:{}", name);
         if (ipSet.contains(name)) {
+            log.info("ipset already contains:{}", name);
             return;
         }
+        log.info("submit runnable name:{}", name);
 
         executorService.submit(runnable);
         ipSet.add(name);

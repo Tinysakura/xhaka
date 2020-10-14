@@ -81,7 +81,7 @@ public class GatewaySlaveChannelPool implements ApplicationContextAware, Initial
             }
 
             channelMap.remove(channelTag);
-            XhakaGatewayClientThreadPool.removeIpSet("XhakaGatewayClient_" + serverName);
+            XhakaGatewayClientThreadPool.removeIpSet("XhakaGatewayClient_" + serverName + "_" + channelTag);
         } catch (Exception e) {
             log.error("remove slave channel from pool occur exception", e);
         } finally {
