@@ -9,7 +9,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.tinysakura" level="DEBUG">
+    <logger name="com.tinysakura" level="ERROR">
         <appender-ref ref="STDOUT"/>
     </logger>
 
